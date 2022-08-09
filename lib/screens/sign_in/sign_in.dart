@@ -8,6 +8,7 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double containerHeight = MediaQuery.of(context).size.height * 0.55;
+    final double imageHeight = MediaQuery.of(context).size.height * 0.50;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -17,6 +18,24 @@ class SignIn extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
+              Positioned(
+                top: -30,
+                width: screenWidth,
+                child: Hero(
+                  tag: " ",
+                  child: Image.asset(
+                    'assets/images/sign_in.png',
+                    fit: BoxFit.cover,
+                    width: screenWidth,
+                    height: imageHeight,
+                  ),
+                ),
+                // child: Image.asset(
+                //   'assets/images/sign_in.png',
+                //   width: screenWidth,
+                //   height: imageHeight,
+                // ),
+              ),
               AnimatedPositioned(
                 bottom: 0,
                 curve: Curves.easeOutCubic,
