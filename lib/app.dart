@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
+import 'package:venu/provider/google_sign_in.dart';
 import 'package:venu/redux/actions.dart';
 import 'package:venu/redux/reducers.dart';
 import 'package:venu/redux/store.dart';
@@ -37,26 +39,29 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<AppState>(
-      store: _store,
-      child: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, state) {
-            appStateContext = context;
-            getCurrentAppTheme(appStateContext);
-            return MaterialApp(
-              theme: Styles.themeData(state.darkTheme),
-              debugShowCheckedModeBanner: false,
-              routes: {
-                SplashScreen.routeName: (context) => SplashScreen(),
-                IntroScreen.routeName: (context) => IntroScreen(),
-                SignIn.routeName: (context) => SignIn(),
-                // SplashScreen.routeName: (context) => SplashScreen(),
-                // LoginPage.routeName: (context) => LoginPage(),
-                //Home.routeName: (context) => const Home(),
-              },
-            );
-          }),
+    return ChangeNotifierProvider(
+      create: (context) => GoogleSignInProvider(),
+      child: StoreProvider<AppState>(
+        store: _store,
+        child: StoreConnector<AppState, AppState>(
+            converter: (store) => store.state,
+            builder: (context, state) {
+              appStateContext = context;
+              getCurrentAppTheme(appStateContext);
+              return MaterialApp(
+                theme: Styles.themeData(state.darkTheme),
+                debugShowCheckedModeBanner: false,
+                routes: {
+                  SplashScreen.routeName: (context) => SplashScreen(),
+                  IntroScreen.routeName: (context) => IntroScreen(),
+                  SignIn.routeName: (context) => SignIn(),
+                  // SplashScreen.routeName: (context) => SplashScreen(),
+                  // LoginPage.routeName: (context) => LoginPage(),
+                  //Home.routeName: (context) => const Home(),
+                },
+              );
+            }),
+      ),
     );
   }
 }

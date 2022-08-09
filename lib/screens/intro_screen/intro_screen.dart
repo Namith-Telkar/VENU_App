@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:rive/rive.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -28,10 +29,15 @@ class _IntroScreenState extends State<IntroScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image.asset(
-                        'assets/images/logo.png',
+                      const SizedBox(
                         width: 75.0,
+                        height: 25.0,
+                        child: RiveAnimation.asset('assets/images/venu-logo.riv'),
                       ),
+                      // Image.asset(
+                      //   'assets/images/logo.png',
+                      //   width: 75.0,
+                      // ),
                       Container(
                           margin: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 50.0),
@@ -42,8 +48,14 @@ class _IntroScreenState extends State<IntroScreen> {
                                 fontSize: 22.0,
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
-                          )),
-                      Image.asset('assets/images/intro1.png'),
+                          ),
+                      ),
+                      const SizedBox(
+                        width: 255,
+                        height: 300,
+                        child:RiveAnimation.asset('assets/images/intro-1.riv'),
+                      )
+                      //Image.asset('assets/images/intro1.png'),
                     ],
                   ),
                 ),
@@ -62,9 +74,10 @@ class _IntroScreenState extends State<IntroScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image.asset(
-                        'assets/images/logo.png',
+                      const SizedBox(
                         width: 75.0,
+                        height: 25.0,
+                        child: RiveAnimation.asset('assets/images/venu-logo.riv'),
                       ),
                       Container(
                           margin: const EdgeInsets.symmetric(
@@ -77,7 +90,11 @@ class _IntroScreenState extends State<IntroScreen> {
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           )),
-                      Image.asset('assets/images/intro2.png'),
+                      const SizedBox(
+                        width: 255,
+                        height: 300,
+                        child:RiveAnimation.asset('assets/images/intro-2.riv'),
+                      ),
                     ],
                   ),
                 ),
@@ -96,9 +113,10 @@ class _IntroScreenState extends State<IntroScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image.asset(
-                        'assets/images/logo.png',
+                      const SizedBox(
                         width: 75.0,
+                        height: 25.0,
+                        child: RiveAnimation.asset('assets/images/venu-logo.riv'),
                       ),
                       Container(
                           margin: const EdgeInsets.symmetric(
@@ -111,7 +129,11 @@ class _IntroScreenState extends State<IntroScreen> {
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           )),
-                      Image.asset('assets/images/intro3.png'),
+                      const SizedBox(
+                        width: 350,
+                        height: 300,
+                        child:RiveAnimation.asset('assets/images/intro-3.riv'),
+                      )
                     ],
                   ),
                 ),
@@ -130,9 +152,10 @@ class _IntroScreenState extends State<IntroScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image.asset(
-                        'assets/images/logo.png',
+                      const SizedBox(
                         width: 75.0,
+                        height: 25.0,
+                        child: RiveAnimation.asset('assets/images/venu-logo.riv'),
                       ),
                       Container(
                           margin: const EdgeInsets.symmetric(
@@ -145,7 +168,11 @@ class _IntroScreenState extends State<IntroScreen> {
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           )),
-                      Image.asset('assets/images/intro4.png'),
+                      const SizedBox(
+                        width: 275,
+                        height: 300,
+                        child:RiveAnimation.asset('assets/images/intro-4.riv'),
+                      ),
                     ],
                   ),
                 ),
@@ -182,7 +209,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         style: TextStyle(
                           fontFamily: "Google-Sans",
                           fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
                           color: Colors.black,
                         ),
                       ),

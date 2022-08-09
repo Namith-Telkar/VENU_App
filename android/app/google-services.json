@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "800650856688",
+    "project_id": "venu-13f22",
+    "storage_bucket": "venu-13f22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800650856688:android:3949723ea7a606e47c5a35",
+        "android_client_info": {
+          "package_name": "dev.arnavdewan.venu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800650856688-mnod637kankagq2np8hoaiot1tmaip3s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB3R8TCUf4D_Wi6t_Tafn42gGp1dj-lm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800650856688-mnod637kankagq2np8hoaiot1tmaip3s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
