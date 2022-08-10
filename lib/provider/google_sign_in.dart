@@ -28,7 +28,7 @@ class GoogleSignInProvider extends ChangeNotifier{
 
   Future logout() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 
 }

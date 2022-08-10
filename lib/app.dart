@@ -8,6 +8,8 @@ import 'package:venu/redux/reducers.dart';
 import 'package:venu/redux/store.dart';
 import 'package:venu/screens/home/home.dart';
 import 'package:venu/screens/intro_screen/intro_screen.dart';
+import 'package:venu/screens/preferences/preferences.dart';
+import 'package:venu/screens/room/room.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 import 'package:venu/screens/splash_screen/splash_screen.dart';
 import 'package:venu/services/dart_theme_preferences.dart';
@@ -51,10 +53,13 @@ class _AppState extends State<App> {
               return MaterialApp(
                 theme: Styles.themeData(state.darkTheme),
                 debugShowCheckedModeBanner: false,
+                //initialRoute: '/room',
                 routes: {
                   SplashScreen.routeName: (context) => SplashScreen(),
                   IntroScreen.routeName: (context) => IntroScreen(),
                   SignIn.routeName: (context) => SignIn(),
+                  Preferences.routeName: (context) => Preferences(),
+                  Room.routename: (context) => Room(),
                   // SplashScreen.routeName: (context) => SplashScreen(),
                   // LoginPage.routeName: (context) => LoginPage(),
                   //Home.routeName: (context) => const Home(),

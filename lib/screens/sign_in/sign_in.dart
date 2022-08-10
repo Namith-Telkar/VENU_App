@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/provider/google_sign_in.dart';
+import 'package:venu/screens/preferences/preferences.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -16,17 +17,9 @@ class SignIn extends StatelessWidget {
     final double imageHeight = MediaQuery.of(context).size.height * 0.50;
 
     return Scaffold(
+      backgroundColor: const Color(0xffE5E5E5),
       resizeToAvoidBottomInset: false,
-      body: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-            } else if (snapshot.hasData) {
-              debugPrint('gg it work');
-            } else if (snapshot.hasError) {
-              debugPrint("Error");
-            }
-            return SafeArea(
+      body:SafeArea(
               child: Container(
                 color: const Color(0xffE5E5E5),
                 child: Stack(
@@ -44,18 +37,7 @@ class SignIn extends StatelessWidget {
                             'assets/images/login-page.riv',
                           ),
                         ),
-                        // child: Image.asset(
-                        //   'assets/images/sign_in.png',
-                        //   fit: BoxFit.cover,
-                        //   width: screenWidth,
-                        //   height: imageHeight,
-                        // ),
                       ),
-                      // child: Image.asset(
-                      //   'assets/images/sign_in.png',
-                      //   width: screenWidth,
-                      //   height: imageHeight,
-                      // ),
                     ),
                     AnimatedPositioned(
                       bottom: 0,
@@ -114,12 +96,15 @@ class SignIn extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 0.0),
                                 child: ElevatedButton.icon(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     final provider =
                                         Provider.of<GoogleSignInProvider>(
                                             context,
                                             listen: false);
-                                    provider.googleLogin();
+                                    await provider.googleLogin();
+                                    if(FirebaseAuth.instance.currentUser!=null){
+                                      Navigator.pushReplacementNamed(context, Preferences.routeName);
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: const StadiumBorder(),
@@ -145,13 +130,13 @@ class SignIn extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 0.0),
-                                child: OutlinedButton(
-                                  onPressed: () {
+                                child: OutlinedButton.icon(
+                                  onPressed: () async {
                                     final provider =
                                         Provider.of<GoogleSignInProvider>(
                                             context,
                                             listen: false);
-                                    provider.logout();
+                                    await provider.logout();
                                   },
                                   style: OutlinedButton.styleFrom(
                                     shape: const StadiumBorder(),
@@ -163,8 +148,12 @@ class SignIn extends StatelessWidget {
                                       width: 3.0,
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Sign Up',
+                                  icon: const FaIcon(
+                                    FontAwesomeIcons.google,
+                                    color: Colors.black,
+                                  ),
+                                  label: const Text(
+                                    'Sign Up with Google',
                                     style: TextStyle(
                                       fontFamily: "Google-Sans",
                                       fontSize: 18.0,
@@ -185,8 +174,7 @@ class SignIn extends StatelessWidget {
                   ],
                 ),
               ),
-            );
-          }),
+            ),
     );
   }
 }
