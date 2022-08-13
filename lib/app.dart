@@ -8,6 +8,7 @@ import 'package:venu/redux/reducers.dart';
 import 'package:venu/redux/store.dart';
 import 'package:venu/screens/home/home.dart';
 import 'package:venu/screens/intro_screen/intro_screen.dart';
+import 'package:venu/screens/landing/landing.dart';
 import 'package:venu/screens/preferences/preferences.dart';
 import 'package:venu/screens/room/room.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
@@ -53,16 +54,17 @@ class _AppState extends State<App> {
               return MaterialApp(
                 theme: Styles.themeData(state.darkTheme),
                 debugShowCheckedModeBanner: false,
-                //initialRoute: '/room',
+                initialRoute: '/landing',
                 routes: {
-                  SplashScreen.routeName: (context) => SplashScreen(),
+                  //SplashScreen.routeName: (context) => const SplashScreen(),
                   IntroScreen.routeName: (context) => IntroScreen(),
-                  SignIn.routeName: (context) => SignIn(),
-                  Preferences.routeName: (context) => Preferences(),
-                  Room.routename: (context) => Room(),
+                  SignIn.routeName: (context) => const SignIn(),
+                  Preferences.routeName: (context) => const Preferences(),
+                  Room.routeName: (context) => const Room(),
                   // SplashScreen.routeName: (context) => SplashScreen(),
                   // LoginPage.routeName: (context) => LoginPage(),
-                  //Home.routeName: (context) => const Home(),
+                  Home.routeName: (context) => const Home(),
+                  Landing.routeName: (context) => const Landing(),
                 },
               );
             }),

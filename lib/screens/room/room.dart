@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rive/rive.dart';
+import 'package:venu/screens/room/create_room_dialog.dart';
+import 'package:venu/screens/room/enter_room_dialog.dart';
+import 'package:venu/services/dialog_manager.dart';
 
 class Room extends StatefulWidget {
   const Room({Key? key}) : super(key: key);
-  static const routename = '/room';
+  static const routeName = '/room';
 
   @override
   State<Room> createState() => _RoomState();
 }
 
 class _RoomState extends State<Room> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
 
@@ -37,11 +33,17 @@ class _RoomState extends State<Room> {
                 height: 25.0,
                 child: RiveAnimation.asset('assets/images/venu-logo.riv'),
               ),
+              const SizedBox(
+                width: 175.0,
+                height: 225.0,
+                child: RiveAnimation.asset('assets/images/join_room.riv'),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 0.0),
+                    horizontal: 40.0, vertical: 0.0),
                 child: ElevatedButton(
                   onPressed: () {
+                    DialogManager.showCustomDialog(context, EnterRoomCode(), false);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -62,9 +64,10 @@ class _RoomState extends State<Room> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 0.0),
+                    horizontal: 40.0, vertical: 0.0),
                 child: OutlinedButton(
                   onPressed: () {
+                    DialogManager.showCustomDialog(context, CreateRoomCode(), false);
                   },
                   style: OutlinedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -87,39 +90,12 @@ class _RoomState extends State<Room> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 20.0,
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff26242B),
-        elevation: 10.0,
-        type: BottomNavigationBarType.shifting,
-        items: const [
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.house,
-            ),
-              label: '\u2022'
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.plus,
-            ),
-            label: '\u2022'
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.solidUser,
-            ),
-            label: '\u2022'
-          )
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedLabelStyle: const TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,color: Colors.black),
-        selectedItemColor: const Color(0xffA7D1D7),
-        unselectedItemColor: Colors.black,
       ),
     );
   }
