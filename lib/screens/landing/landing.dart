@@ -26,7 +26,7 @@ class _LandingState extends State<Landing> {
     return Scaffold(
       body: _selectedIndex==0?const Home():_selectedIndex==1?const Room():const Text('Hello'),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xff26242B),
+        backgroundColor: const Color(0xffe5e5e5),
         elevation: 10.0,
         type: BottomNavigationBarType.shifting,
         items: const [

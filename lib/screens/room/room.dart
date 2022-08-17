@@ -19,6 +19,7 @@ class _RoomState extends State<Room> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffe5e5e5),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(

@@ -4,7 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/provider/google_sign_in.dart';
+import 'package:venu/screens/landing/landing.dart';
 import 'package:venu/screens/preferences/preferences.dart';
+import 'package:location/location.dart';
+import 'package:venu/services/network_helper.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -15,6 +18,11 @@ class SignIn extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double containerHeight = MediaQuery.of(context).size.height * 0.55;
     final double imageHeight = MediaQuery.of(context).size.height * 0.50;
+
+
+    Future<bool> checkUserExists() async{
+      return NetworkHelper.checkUserExists(FirebaseAuth.instance.currentUser!.uid.toString());
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xffE5E5E5),
@@ -103,7 +111,12 @@ class SignIn extends StatelessWidget {
                                             listen: false);
                                     await provider.googleLogin();
                                     if(FirebaseAuth.instance.currentUser!=null){
-                                      Navigator.pushReplacementNamed(context, Preferences.routeName);
+                                      if(await checkUserExists()){
+                                        Navigator.pushReplacementNamed(context, Landing.routeName);
+                                      }
+                                      else{
+                                        //show error dialog
+                                      }
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -136,7 +149,16 @@ class SignIn extends StatelessWidget {
                                         Provider.of<GoogleSignInProvider>(
                                             context,
                                             listen: false);
-                                    await provider.logout();
+                                    await provider.googleLogin();
+                                    if(FirebaseAuth.instance.currentUser!=null){
+                                      if(await checkUserExists()){
+                                        //error saying user already exists
+                                      }
+                                      else{
+                                        Navigator.pushReplacementNamed(context, Preferences.routeName);
+                                      }
+                                    }
+                                    //await provider.logout();
                                   },
                                   style: OutlinedButton.styleFrom(
                                     shape: const StadiumBorder(),

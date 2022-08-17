@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:rive/rive.dart';
 
 class Preferences extends StatefulWidget {
@@ -12,6 +14,32 @@ class Preferences extends StatefulWidget {
 
 class _PreferencesState extends State<Preferences> {
   bool isChecked = false;
+
+  Map<String, dynamic> userDetails = {};
+
+  Location location = Location();
+
+  late bool serviceEnabled;
+  late PermissionStatus permissionGranted;
+  late LocationData locationData;
+
+  Future<LocationData> getLocation() async{
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+    }
+
+    if(!serviceEnabled || permissionGranted != PermissionStatus.granted){
+      //show error
+    }
+    locationData = await location.getLocation();
+    return locationData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +85,9 @@ class _PreferencesState extends State<Preferences> {
                 ),
                 child: TextFormField(
                   onChanged: (val) {
+                    setState(() {
+                      userDetails['twitter_handle'] = val;
+                    });
                   },
                   style: const TextStyle(
                     fontFamily: 'Google-Sans',
@@ -129,7 +160,16 @@ class _PreferencesState extends State<Preferences> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if(isChecked){
+                      await getLocation();
+                      userDetails['latitude'] = locationData.latitude;
+                      userDetails['longitude'] = locationData.longitude;
+                      userDetails['googleToken'] = FirebaseAuth.instance.currentUser!.uid.toString();
+                      print('user details');
+                      print(userDetails);
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
                     minimumSize: const Size(double.infinity, 56),

@@ -1,25 +1,77 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NetworkHelper {
   NetworkHelper();
 
-  static String endpoint = 'https://www.example.com/api';
+  static String endpoint = 'https://venu-backend-api.herokuapp.com';
 
-  static Future<bool> checkUserExists(String phone) async {
-    var url = Uri.parse('$endpoint/user-exists?phone=$phone');
-    var response = await http.get(url);
-    if (kDebugMode) {
-      print(
-        'get $url ${response.statusCode} Response: ${response.body} ${response.headers}',
-      );
-    }
-    if (response.statusCode == 200 && response.body == 'true') {
+  static Future<bool> checkUserExists(String googleToken) async{
+    var url = Uri.parse('$endpoint/api/user/getDetails');
+    print('check check');
+    print(googleToken);
+    var response = await http.post(url, body: {
+      'token': googleToken,
+    });
+    print(response.body);
+    Map<String, dynamic> responseObject = await json.decode(response.body);
+    if(responseObject['success']){
       return true;
     }
     return false;
   }
+
+  static Future<Map<String, dynamic>> getUser(String googleToken) async{
+    var url = Uri.parse('$endpoint/api/user/getDetails');
+    var response = await http.post(url, body: {
+      'token': googleToken,
+    });
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    if(responseObject['success']){
+      return responseObject;
+    }
+    Map<String, dynamic> result = {};
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> addUser(Map<String, dynamic> userDetails) async{
+    var url = Uri.parse('$endpoint/api/user/addDetails');
+    var response = await http.post(url, body: {
+      'token': userDetails['googleToken'],
+      'twitter': userDetails['twitterHandle'],
+      'location': {
+        'lat': userDetails['latitude'],
+        'lng': userDetails['longitude'],
+      }
+    });
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    if(responseObject['success']){
+      result = responseObject;
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+
+
 }
+
+// static Future<bool> checkUserExists(String phone) async {
+//   var url = Uri.parse('$endpoint/user-exists?phone=$phone');
+//   var response = await http.get(url);
+//   if (kDebugMode) {
+//     print(
+//       'get $url ${response.statusCode} Response: ${response.body} ${response.headers}',
+//     );
+//   }
+//   if (response.statusCode == 200 && response.body == 'true') {
+//     return true;
+//   }
+//   return false;
+// }
 
 // static Future<Map<String, dynamic>> registerAndGetUserDetails(
 //     AccountDetails accountDetails,

@@ -53,7 +53,9 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rive/rive.dart';
+import 'package:venu/screens/home/card.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -64,13 +66,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool noRoom = true;
+  bool noRoom = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffe5e5e5),
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
-          child: Column(
+          child: noRoom ? Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const SizedBox(
@@ -112,6 +116,49 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(
                 height: 20.0,
+              ),
+            ],
+          ) : Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const SizedBox(
+                height: 50.0,
+              ),
+              const SizedBox(
+                width: 75.0,
+                height: 25.0,
+                child: RiveAnimation.asset('assets/images/venu-logo.riv'),
+              ),
+              const SizedBox(
+                height: 40.0,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                    vertical: 0.0, horizontal: 40.0),
+                child: const Text(
+                  'Rooms you have joined',
+                  style: TextStyle(
+                    fontFamily: "Google-Sans",
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(
+                height: 40.0,
+              ),
+              Expanded(
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  children: [
+                    RoomCard(roomName: 'Annav', roomCode: '#420', noOfPpl: 10),
+                    RoomCard(roomName: 'Kulcha', roomCode: '#420', noOfPpl: 10),
+                    RoomCard(roomName: 'Namo', roomCode: '#420', noOfPpl: 10),
+                    RoomCard(roomName: 'Pracherrrr', roomCode: '#420', noOfPpl: 10),
+                    RoomCard(roomName: 'Rando', roomCode: '#420', noOfPpl: 10),
+                  ],
+                ),
               ),
             ],
           ),
