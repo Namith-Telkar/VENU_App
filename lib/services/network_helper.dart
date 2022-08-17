@@ -8,12 +8,11 @@ class NetworkHelper {
 
   static Future<bool> checkUserExists(String googleToken) async{
     var url = Uri.parse('$endpoint/api/user/getDetails');
-    print('check check');
-    print(googleToken);
-    var response = await http.post(url, body: {
+    Map data = {
       'token': googleToken,
-    });
-    print(response.body);
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(url,headers: {'Content-Type': 'application/json'}, body: body);
     Map<String, dynamic> responseObject = await json.decode(response.body);
     if(responseObject['success']){
       return true;
@@ -23,9 +22,11 @@ class NetworkHelper {
 
   static Future<Map<String, dynamic>> getUser(String googleToken) async{
     var url = Uri.parse('$endpoint/api/user/getDetails');
-    var response = await http.post(url, body: {
+    Map data = {
       'token': googleToken,
-    });
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: {'Content-Type': 'application/json'},body: body);
     Map<String, dynamic> responseObject = json.decode(response.body);
     if(responseObject['success']){
       return responseObject;
@@ -37,18 +38,21 @@ class NetworkHelper {
 
   static Future<Map<String, dynamic>> addUser(Map<String, dynamic> userDetails) async{
     var url = Uri.parse('$endpoint/api/user/addDetails');
-    var response = await http.post(url, body: {
+    print(userDetails);
+    var response = await http.post(url,headers: {'Content-Type': 'application/json'}, body: jsonEncode({
       'token': userDetails['googleToken'],
       'twitter': userDetails['twitterHandle'],
       'location': {
         'lat': userDetails['latitude'],
         'lng': userDetails['longitude'],
       }
-    });
+    }));
     Map<String, dynamic> responseObject = json.decode(response.body);
+    print(responseObject);
     Map<String, dynamic> result = {};
     if(responseObject['success']){
-      result = responseObject;
+      result['success']=true;
+      result['userDetails'] = responseObject['user'];
       return result;
     }
     result['success'] = false;

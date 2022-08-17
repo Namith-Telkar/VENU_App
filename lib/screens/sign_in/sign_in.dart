@@ -7,6 +7,7 @@ import 'package:venu/provider/google_sign_in.dart';
 import 'package:venu/screens/landing/landing.dart';
 import 'package:venu/screens/preferences/preferences.dart';
 import 'package:location/location.dart';
+import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/services/network_helper.dart';
 
 class SignIn extends StatelessWidget {
@@ -21,7 +22,8 @@ class SignIn extends StatelessWidget {
 
 
     Future<bool> checkUserExists() async{
-      return NetworkHelper.checkUserExists(FirebaseAuth.instance.currentUser!.uid.toString());
+      String token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      return NetworkHelper.checkUserExists(token);
     }
 
     return Scaffold(
@@ -109,9 +111,11 @@ class SignIn extends StatelessWidget {
                                         Provider.of<GoogleSignInProvider>(
                                             context,
                                             listen: false);
+                                    DialogManager.showLoadingDialog(context);
                                     await provider.googleLogin();
                                     if(FirebaseAuth.instance.currentUser!=null){
                                       if(await checkUserExists()){
+                                        DialogManager.hideDialog(context);
                                         Navigator.pushReplacementNamed(context, Landing.routeName);
                                       }
                                       else{

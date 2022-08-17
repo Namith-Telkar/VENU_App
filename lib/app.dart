@@ -54,15 +54,13 @@ class _AppState extends State<App> {
               return MaterialApp(
                 theme: Styles.themeData(state.darkTheme),
                 debugShowCheckedModeBanner: false,
-                initialRoute: '/landing',
+                //initialRoute: '/landing',
                 routes: {
-                  //SplashScreen.routeName: (context) => const SplashScreen(),
+                  SplashScreen.routeName: (context) => const SplashScreen(),
                   IntroScreen.routeName: (context) => IntroScreen(),
                   SignIn.routeName: (context) => const SignIn(),
                   Preferences.routeName: (context) => const Preferences(),
                   Room.routeName: (context) => const Room(),
-                  // SplashScreen.routeName: (context) => SplashScreen(),
-                  // LoginPage.routeName: (context) => LoginPage(),
                   Home.routeName: (context) => const Home(),
                   Landing.routeName: (context) => const Landing(),
                 },

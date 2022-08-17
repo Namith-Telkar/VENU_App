@@ -1,14 +1,14 @@
-import '../models/user.dart';
+import '../models/venuUser.dart';
 
 class AppState {
   bool darkTheme = true;
-  User? user;
+  VenuUser? user;
 
   AppState({this.user});
 
   AppState.copyWith({
     required AppState prev,
-    User? user,
+    VenuUser? user,
     bool? darkTheme,
   }) {
     this.user = user ?? prev.user;

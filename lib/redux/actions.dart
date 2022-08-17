@@ -1,4 +1,4 @@
-import '../models/user.dart';
+import '../models/venuUser.dart';
 
 abstract class Action {}
 
@@ -9,7 +9,7 @@ class ToggleTheme extends Action {
 }
 
 class UpdateNewUser extends Action {
-  User newUser;
+  VenuUser newUser;
 
   UpdateNewUser({required this.newUser});
 }
