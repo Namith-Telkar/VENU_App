@@ -119,6 +119,9 @@ class SignIn extends StatelessWidget {
                                         Navigator.pushReplacementNamed(context, Landing.routeName);
                                       }
                                       else{
+                                        await provider.logout();
+                                        DialogManager.hideDialog(context);
+                                        DialogManager.showErrorDialog('User does not exist please sign in', context, true, (){Navigator.pop(context);});
                                         //show error dialog
                                       }
                                     }
@@ -153,12 +156,17 @@ class SignIn extends StatelessWidget {
                                         Provider.of<GoogleSignInProvider>(
                                             context,
                                             listen: false);
+                                    DialogManager.showLoadingDialog(context);
                                     await provider.googleLogin();
                                     if(FirebaseAuth.instance.currentUser!=null){
                                       if(await checkUserExists()){
+                                        await provider.logout();
+                                        DialogManager.hideDialog(context);
+                                        DialogManager.showErrorDialog('User already exists please sign in', context, true, (){Navigator.pop(context);});
                                         //error saying user already exists
                                       }
                                       else{
+                                        DialogManager.hideDialog(context);
                                         Navigator.pushReplacementNamed(context, Preferences.routeName);
                                       }
                                     }

@@ -24,14 +24,16 @@ class ErrorDialog extends StatelessWidget {
       child: AlertDialog(
         backgroundColor: Theme.of(context).canvasColor,
         title: Center(
-          child: Text(
-            _title,
-            style: TextStyle(
-              fontSize: 18.0,
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontWeight: FontWeight.w500,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+            child: Text(
+              _title,
+              style: const TextStyle(
+                fontFamily: "Google-Sans",
+                fontSize: 16.0,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
         ),
         content: Container(
@@ -49,21 +51,19 @@ class ErrorDialog extends StatelessWidget {
                         children: <Widget>[
                           Positioned.fill(
                             child: Container(
-                              color: mainButtonColor,
+                              color: const Color(0xffA7D1D7),
                             ),
                           ),
                           TextButton(
                             onPressed: () {
                               _okFunction();
                             },
-                            child: Text(
+                            child: const Text(
                               'Okay',
                               style: TextStyle(
+                                fontFamily: "Google-Sans",
                                 fontSize: 14.0,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
