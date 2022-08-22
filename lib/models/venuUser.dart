@@ -9,7 +9,6 @@ class VenuUser {
     required this.location,
   });
 
-
   static VenuUser fromNetworkMap(Map<String, dynamic> map) {
     return VenuUser(
       personality: map['personality'] ?? 'Not set',

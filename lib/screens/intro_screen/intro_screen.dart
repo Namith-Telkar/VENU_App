@@ -16,7 +16,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE5E5E5),
+      backgroundColor: const Color(0xffE5E5E5),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: IntroductionScreen(

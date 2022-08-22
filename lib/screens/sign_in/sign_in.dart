@@ -115,14 +115,21 @@ class SignIn extends StatelessWidget {
                                     await provider.googleLogin();
                                     if(FirebaseAuth.instance.currentUser!=null){
                                       if(await checkUserExists()){
+                                        print('token token');
+                                        String token = await FirebaseAuth.instance.currentUser!.getIdToken();
+                                        while (token.length > 0) {
+                                          int initLength = (token.length >= 500 ? 500 : token.length);
+                                          print(token.substring(0, initLength));
+                                          int endLength = token.length;
+                                          token = token.substring(initLength, endLength);
+                                        }
                                         DialogManager.hideDialog(context);
                                         Navigator.pushReplacementNamed(context, Landing.routeName);
                                       }
                                       else{
                                         await provider.logout();
                                         DialogManager.hideDialog(context);
-                                        DialogManager.showErrorDialog('User does not exist please sign in', context, true, (){Navigator.pop(context);});
-                                        //show error dialog
+                                        DialogManager.showErrorDialog('User does not exist please sign up', context, true, (){Navigator.pop(context);});
                                       }
                                     }
                                   },
@@ -163,7 +170,6 @@ class SignIn extends StatelessWidget {
                                         await provider.logout();
                                         DialogManager.hideDialog(context);
                                         DialogManager.showErrorDialog('User already exists please sign in', context, true, (){Navigator.pop(context);});
-                                        //error saying user already exists
                                       }
                                       else{
                                         DialogManager.hideDialog(context);

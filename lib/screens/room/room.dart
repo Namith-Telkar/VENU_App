@@ -15,11 +15,9 @@ class Room extends StatefulWidget {
 
 class _RoomState extends State<Room> {
 
-  @override
-
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffe5e5e5),
+      backgroundColor: const Color(0xffE5E5E5),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
@@ -44,7 +42,7 @@ class _RoomState extends State<Room> {
                     horizontal: 40.0, vertical: 0.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    DialogManager.showCustomDialog(context, EnterRoomCode(), false);
+                    DialogManager.showCustomDialog(context, EnterRoomCode(), true);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -68,7 +66,7 @@ class _RoomState extends State<Room> {
                     horizontal: 40.0, vertical: 0.0),
                 child: OutlinedButton(
                   onPressed: () {
-                    DialogManager.showCustomDialog(context, CreateRoomCode(), false);
+                    DialogManager.showCustomDialog(context, CreateRoomCode(), true);
                   },
                   style: OutlinedButton.styleFrom(
                     shape: const StadiumBorder(),
