@@ -8,6 +8,7 @@ import 'package:venu/models/venuUser.dart';
 import 'package:venu/redux/actions.dart';
 import 'package:venu/redux/store.dart';
 import 'package:venu/screens/landing/landing.dart';
+import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/services/network_helper.dart';
 
 class Preferences extends StatefulWidget {
@@ -95,7 +96,7 @@ class _PreferencesState extends State<Preferences> {
                       vertical: 0.0,
                       horizontal: 40.0,
                     ),
-                    child: TextFormField(
+                    child: TextField(
                       onChanged: (val) {
                         setState(() {
                           userDetails['twitterHandle'] = val;
@@ -175,6 +176,7 @@ class _PreferencesState extends State<Preferences> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (isChecked) {
+                          DialogManager.showLoadingDialog(context);
                           await getLocation();
                           userDetails['latitude'] = locationData.latitude;
                           userDetails['longitude'] = locationData.longitude;
@@ -186,10 +188,14 @@ class _PreferencesState extends State<Preferences> {
                             StoreProvider.of<AppState>(context).dispatch(
                                 UpdateNewUser(newUser: user)
                             );
+                            DialogManager.hideDialog(context);
                             Navigator.pushReplacementNamed(context, Landing.routeName);
                           }
                           else{
-                            print('error');
+                            DialogManager.hideDialog(context);
+                            DialogManager.showErrorDialog('Error setting twitter handle', context, true, (){
+                              DialogManager.hideDialog(context);
+                            });
                           }
                         }
                       },

@@ -70,11 +70,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Future<List> roomList;
+  List tempRoomList = [];
   int noOfRooms = 0;
 
   Future<List> setRoomList() async {
     Map<String, dynamic> response = {};
-    //DialogManager.showLoadingDialog(context);
     String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
     response = await NetworkHelper.getRooms(googleToken);
     if (response['success']) {
@@ -83,10 +83,9 @@ class _HomeState extends State<Home> {
         setState(() {
           noOfRooms = 1;
         });
+        return response['rooms'];
       }
-      return response['rooms'];
     }
-    //DialogManager.hideDialog(context);
     return [];
   }
 
@@ -94,6 +93,11 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     roomList = setRoomList();
+    roomList.then((value) {
+      setState(() {
+       tempRoomList=value;
+      });
+    });
   }
 
   @override
@@ -194,32 +198,45 @@ class _HomeState extends State<Home> {
                               height: 40.0,
                             ),
                             Expanded(
-                              child: ListView(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                children: [
-                                  RoomCard(
-                                      roomName: 'Annav',
-                                      roomCode: '#420',
-                                      noOfPpl: 10),
-                                  RoomCard(
-                                      roomName: 'Kulcha',
-                                      roomCode: '#420',
-                                      noOfPpl: 10),
-                                  RoomCard(
-                                      roomName: 'Namo',
-                                      roomCode: '#420',
-                                      noOfPpl: 10),
-                                  RoomCard(
-                                      roomName: 'Pracherrrr',
-                                      roomCode: '#420',
-                                      noOfPpl: 10),
-                                  RoomCard(
-                                      roomName: 'Rando',
-                                      roomCode: '#420',
-                                      noOfPpl: 10),
-                                ],
-                              ),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: tempRoomList.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return RoomCard(
+                                        roomName: tempRoomList[index]['name'],
+                                        roomCode: tempRoomList[index]['id'],
+                                        noOfPpl: tempRoomList[index]
+                                            ['userCount']);
+                                  }),
+                              // child: ListView(
+                              //   scrollDirection: Axis.vertical,
+                              //   shrinkWrap: true,
+                              //   children: roomList.map(),
+                              // children: [
+                              //   RoomCard(
+                              //       roomName: 'Annav',
+                              //       roomCode: '#420',
+                              //       noOfPpl: 10),
+                              //   RoomCard(
+                              //       roomName: 'Kulcha',
+                              //       roomCode: '#420',
+                              //       noOfPpl: 10),
+                              //   RoomCard(
+                              //       roomName: 'Namo',
+                              //       roomCode: '#420',
+                              //       noOfPpl: 10),
+                              //   RoomCard(
+                              //       roomName: 'Pracherrrr',
+                              //       roomCode: '#420',
+                              //       noOfPpl: 10),
+                              //   RoomCard(
+                              //       roomName: 'Rando',
+                              //       roomCode: '#420',
+                              //       noOfPpl: 10),
+                              // ],
+                              //),
                             ),
                           ],
                         ),
