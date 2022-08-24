@@ -102,8 +102,8 @@ class SignIn extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
+                              Container(
+                                margin: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 0.0),
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
@@ -115,14 +115,13 @@ class SignIn extends StatelessWidget {
                                     await provider.googleLogin();
                                     if(FirebaseAuth.instance.currentUser!=null){
                                       if(await checkUserExists()){
-                                        print('token token');
                                         String token = await FirebaseAuth.instance.currentUser!.getIdToken();
-                                        while (token.length > 0) {
-                                          int initLength = (token.length >= 500 ? 500 : token.length);
-                                          print(token.substring(0, initLength));
-                                          int endLength = token.length;
-                                          token = token.substring(initLength, endLength);
-                                        }
+                                        // while (token.length > 0) {
+                                        //   int initLength = (token.length >= 500 ? 500 : token.length);
+                                        //   print(token.substring(0, initLength));
+                                        //   int endLength = token.length;
+                                        //   token = token.substring(initLength, endLength);
+                                        // }
                                         DialogManager.hideDialog(context);
                                         Navigator.pushReplacementNamed(context, Landing.routeName);
                                       }

@@ -7,6 +7,7 @@ import 'package:venu/redux/actions.dart';
 import 'package:venu/redux/reducers.dart';
 import 'package:venu/redux/store.dart';
 import 'package:venu/screens/home/home.dart';
+import 'package:venu/screens/inside_room/inside_room.dart';
 import 'package:venu/screens/intro_screen/intro_screen.dart';
 import 'package:venu/screens/landing/landing.dart';
 import 'package:venu/screens/preferences/preferences.dart';
@@ -54,7 +55,7 @@ class _AppState extends State<App> {
               return MaterialApp(
                 theme: Styles.themeData(state.darkTheme),
                 debugShowCheckedModeBanner: false,
-                //initialRoute: '/landing',
+                //initialRoute: '/inside_room',
                 routes: {
                   SplashScreen.routeName: (context) => const SplashScreen(),
                   IntroScreen.routeName: (context) => IntroScreen(),
@@ -65,7 +66,8 @@ class _AppState extends State<App> {
                   Landing.routeName: (context) => const Landing(),
                 },
               );
-            }),
+            }
+            ),
       ),
     );
   }

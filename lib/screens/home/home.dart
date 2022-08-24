@@ -57,6 +57,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/screens/home/card.dart';
+import 'package:venu/screens/inside_room/inside_room.dart';
 import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/services/network_helper.dart';
 
@@ -95,7 +96,7 @@ class _HomeState extends State<Home> {
     roomList = setRoomList();
     roomList.then((value) {
       setState(() {
-       tempRoomList=value;
+        tempRoomList = value;
       });
     });
   }
@@ -204,46 +205,30 @@ class _HomeState extends State<Home> {
                                   itemCount: tempRoomList.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return RoomCard(
-                                        roomName: tempRoomList[index]['name'],
-                                        roomCode: tempRoomList[index]['id'],
-                                        noOfPpl: tempRoomList[index]
-                                            ['userCount']);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InsideRoom(
+                                                        roomId:
+                                                            tempRoomList[index]
+                                                                ['id'])));
+                                      },
+                                      child: RoomCard(
+                                          roomName: tempRoomList[index]['name'],
+                                          roomCode: tempRoomList[index]['id'],
+                                          noOfPpl: tempRoomList[index]
+                                              ['userCount']),
+                                    );
                                   }),
-                              // child: ListView(
-                              //   scrollDirection: Axis.vertical,
-                              //   shrinkWrap: true,
-                              //   children: roomList.map(),
-                              // children: [
-                              //   RoomCard(
-                              //       roomName: 'Annav',
-                              //       roomCode: '#420',
-                              //       noOfPpl: 10),
-                              //   RoomCard(
-                              //       roomName: 'Kulcha',
-                              //       roomCode: '#420',
-                              //       noOfPpl: 10),
-                              //   RoomCard(
-                              //       roomName: 'Namo',
-                              //       roomCode: '#420',
-                              //       noOfPpl: 10),
-                              //   RoomCard(
-                              //       roomName: 'Pracherrrr',
-                              //       roomCode: '#420',
-                              //       noOfPpl: 10),
-                              //   RoomCard(
-                              //       roomName: 'Rando',
-                              //       roomCode: '#420',
-                              //       noOfPpl: 10),
-                              // ],
-                              //),
                             ),
                           ],
                         ),
                 ),
               );
             default:
-              return SizedBox();
+              return const SizedBox();
           }
         },
       ),
