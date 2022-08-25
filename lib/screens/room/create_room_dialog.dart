@@ -24,7 +24,7 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
   String lat = '';
   String lng = '';
 
-  bool switchValue = false;
+  bool switchValue = true;
 
   Map<String,dynamic> userDetails = {};
 
@@ -89,7 +89,7 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
         radius: const Radius.circular(20),
         child: SingleChildScrollView(
           child: SizedBox(
-            height: switchValue?MediaQuery.of(context).size.height * 0.50:MediaQuery.of(context).size.height * 0.30,
+            height: switchValue?MediaQuery.of(context).size.height * 0.30:MediaQuery.of(context).size.height * 0.50,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -131,17 +131,10 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 0.0),
+                    margin: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 40.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Current location',
-                          style: TextStyle(
-                            fontFamily: "Google-Sans",
-                            fontSize: 12.0,
-                          ),
-                        ),
                         SizedBox(
                           width: 10.0,
                           child: CupertinoSwitch(
@@ -151,12 +144,14 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
                                 switchValue = value;
                               });
                             },
-                            trackColor: const Color(0xffA7D1D7),
                             activeColor: const Color(0xffA7D1D7),
                           ),
                         ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.08,
+                        ),
                         const Text(
-                          'Enter location',
+                          'Use current location',
                           style: TextStyle(
                             fontFamily: "Google-Sans",
                             fontSize: 12.0,
@@ -165,7 +160,7 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
                       ],
                     ),
                   ),
-                  !switchValue?const SizedBox(width: 0.0,):Container(
+                  switchValue?const SizedBox(width: 0.0,):Container(
                     margin: const EdgeInsets.symmetric(vertical: 20.0,horizontal: 0.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -271,7 +266,7 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
                         DialogManager.showLoadingDialog(context);
                         userDetails['googleToken'] = await FirebaseAuth.instance.currentUser!.getIdToken();
                         userDetails['roomName'] = roomName;
-                        if(!switchValue){
+                        if(switchValue){
                           await getLocation();
                           userDetails['latitude'] = locationData.latitude;
                           userDetails['longitude'] = locationData.longitude;

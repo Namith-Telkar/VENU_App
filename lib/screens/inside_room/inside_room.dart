@@ -81,7 +81,7 @@ class _InsideRoomState extends State<InsideRoom> {
                                 children: [
                                   ListTile(
                                     leading: CircleAvatar(
-                                      radius: 50,
+                                      radius: 25,
                                       backgroundImage:
                                           NetworkImage(users[index]['url']),
                                     ),

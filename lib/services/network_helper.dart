@@ -140,8 +140,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print('hello hello');
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['result'];
