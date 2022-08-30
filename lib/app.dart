@@ -12,6 +12,7 @@ import 'package:venu/screens/intro_screen/intro_screen.dart';
 import 'package:venu/screens/landing/landing.dart';
 import 'package:venu/screens/preferences/preferences.dart';
 import 'package:venu/screens/room/room.dart';
+import 'package:venu/screens/room_settings/room_settings.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 import 'package:venu/screens/splash_screen/splash_screen.dart';
 import 'package:venu/services/dart_theme_preferences.dart';
@@ -64,6 +65,7 @@ class _AppState extends State<App> {
                   Room.routeName: (context) => const Room(),
                   Home.routeName: (context) => const Home(),
                   Landing.routeName: (context) => const Landing(),
+                  RoomSettings.routeName: (context) => const RoomSettings(),
                 },
               );
             }

@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rive/rive.dart';
+import 'package:venu/screens/room_settings/room_settings.dart';
 import 'package:venu/services/network_helper.dart';
 
 class InsideRoom extends StatefulWidget {
@@ -34,7 +36,7 @@ class _InsideRoomState extends State<InsideRoom> {
       String temp = '';
       value['result']['gpEncoding'][0]>0?temp='${temp}i':temp='${temp}e';
       value['result']['gpEncoding'][0]>0?temp='${temp}n':temp='${temp}s';
-      value['result']['gpEncoding'][0]>0?temp='${temp}t':temp='${temp}f';
+      value['result']['gpEncoding'][0]>0?temp='${temp}f':temp='${temp}t';
       value['result']['gpEncoding'][0]>0?temp='${temp}p':temp='${temp}j';
       setState(() {
         users = value['result']['users'];
@@ -66,45 +68,147 @@ class _InsideRoomState extends State<InsideRoom> {
                 resizeToAvoidBottomInset: false,
                 endDrawer: SafeArea(
                   child: Drawer(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 50.0),
-                      child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: users.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              margin: const EdgeInsets.fromLTRB(
-                                  0.0, 0.0, 0.0, 20.0),
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    leading: CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage:
-                                          NetworkImage(users[index]['url']),
-                                    ),
-                                    title: Text(
-                                      users[index]['email'].substring(0,
-                                          users[index]['email'].indexOf('@')),
-                                      style: const TextStyle(
-                                        fontFamily: 'Google-Sans',
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 10.0),
+                          child: const Text(
+                            'Room Code:',
+                            style: TextStyle(
+                              fontFamily: 'Google-Sans',
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 10.0),
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xffA7D1D7), width: 1.5)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width:MediaQuery.of(context).size.height*0.14,
+                                child: Text(
+                                  widget.roomId,
+                                  style: const TextStyle(
+                                    fontFamily: "Google-Sans",
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
                                   ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  const Divider(
-                                    thickness: 1,
-                                    color: Colors.black54,
-                                  ),
-                                ],
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            );
-                          }),
+                              GestureDetector(
+                                onTap: (){
+                                  Clipboard.setData(ClipboardData(text: widget.roomId)).then((_){
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(content: Text('Copied to your clipboard !',style: TextStyle(fontFamily: 'Google-Sans'),)));
+                                  });
+                                },
+                                child: Row(
+                                  children: const [
+                                    FaIcon(
+                                      FontAwesomeIcons.copy,
+                                      color: Colors.black54,
+                                    ),
+                                    Text(
+                                      ' Copy code',
+                                      style: TextStyle(
+                                        fontFamily: "Google-Sans",
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black54,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 10.0),
+                          child: const Text(
+                            'Participants:',
+                            style: TextStyle(
+                              fontFamily: 'Google-Sans',
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 20.0),
+                          child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: users.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  margin: const EdgeInsets.fromLTRB(
+                                      0.0, 0.0, 0.0, 20.0),
+                                  child: Column(
+                                    children: [
+                                      FirebaseAuth.instance.currentUser!.email==users[index]['email']?
+                                      ListTile(
+                                        leading: CircleAvatar(
+                                          radius: 25,
+                                          backgroundImage:
+                                          NetworkImage(users[index]['url']),
+                                        ),
+                                        title: Text(
+                                          users[index]['email'].substring(0,
+                                              users[index]['email'].indexOf('@')),
+                                          style: const TextStyle(
+                                            fontFamily: 'Google-Sans',
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                        trailing: GestureDetector(
+                                          onTap: (){
+                                            Navigator.pushNamed(context, RoomSettings.routeName);
+                                          },
+                                          child: const FaIcon(
+                                            FontAwesomeIcons.gear,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                      ):ListTile(
+                                        leading: CircleAvatar(
+                                          radius: 25,
+                                          backgroundImage:
+                                          NetworkImage(users[index]['url']),
+                                        ),
+                                        title: Text(
+                                          users[index]['email'].substring(0,
+                                              users[index]['email'].indexOf('@')),
+                                          style: const TextStyle(
+                                            fontFamily: 'Google-Sans',
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      const Divider(
+                                        thickness: 1,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
                     ),
                   ),
                 ),
