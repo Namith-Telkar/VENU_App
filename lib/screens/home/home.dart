@@ -81,9 +81,11 @@ class _HomeState extends State<Home> {
     if (response['success']) {
       List temp = response['rooms'];
       if (temp.isNotEmpty) {
-        setState(() {
-          noOfRooms = 1;
-        });
+        if(mounted) {
+          setState(() {
+            noOfRooms = 1;
+          });
+        }
         return response['rooms'];
       }
     }

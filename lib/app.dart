@@ -15,6 +15,7 @@ import 'package:venu/screens/room/room.dart';
 import 'package:venu/screens/room_settings/room_settings.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 import 'package:venu/screens/splash_screen/splash_screen.dart';
+import 'package:venu/screens/venues/venues.dart';
 import 'package:venu/services/dart_theme_preferences.dart';
 import 'package:venu/utilities/styles.dart';
 

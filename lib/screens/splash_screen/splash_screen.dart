@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/screens/intro_screen/intro_screen.dart';
 import 'package:venu/screens/landing/landing.dart';
+import 'package:venu/services/network_helper.dart';
+
+import '../../models/venuUser.dart';
+import '../../redux/actions.dart';
+import '../../redux/store.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,11 +23,21 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Future.delayed(
       const Duration(seconds: 3),
-      () => {
+      () async {
         if (FirebaseAuth.instance.currentUser != null)
-          {Navigator.pushReplacementNamed(context, Landing.routeName)}
+          {
+            String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+            Map<String,dynamic> result = await NetworkHelper.getUser(googleToken);
+            if(result['success']){
+              VenuUser user = VenuUser.fromNetworkMap(result['user']);
+              StoreProvider.of<AppState>(context).dispatch(
+                  UpdateNewUser(newUser: user)
+              );
+              Navigator.pushReplacementNamed(context, Landing.routeName);
+            }
+          }
         else
-          {Navigator.pushReplacementNamed(context, IntroScreen.routeName)}
+          {Navigator.pushReplacementNamed(context, IntroScreen.routeName);}
       },
     );
   }

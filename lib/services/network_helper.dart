@@ -28,10 +28,12 @@ class NetworkHelper {
           'token': googleToken,
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
-    if (responseObject['success']) {
-      return responseObject;
-    }
     Map<String, dynamic> result = {};
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['user'] = responseObject['user'];
+      return result;
+    }
     result['success'] = false;
     return result;
   }
@@ -143,6 +145,44 @@ class NetworkHelper {
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['result'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String,dynamic>> getSuggestions(String googleToken, Map<String,dynamic> suggestionIds) async {
+    var url = Uri.parse('$endpoint/api/user/getSuggestions');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': googleToken,
+          'suggestions': suggestionIds,
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['venues'] = responseObject['result'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String,dynamic>> getPredictions(String googleToken, String roomId) async {
+    var url = Uri.parse('$endpoint/api/user/getPredictions');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': googleToken,
+          'roomId': roomId,
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['venues'] = responseObject['result'];
       return result;
     }
     result['success'] = false;

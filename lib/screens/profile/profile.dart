@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     Text(
-                      'Your personality type is : ${StoreProvider.of<AppState>(appStateContext).state.user?.personality}',
+                      'Personality type : ${StoreProvider.of<AppState>(appStateContext).state.user?.personality}',
                       style: const TextStyle(
                         fontFamily: 'Google-Sans',
                         fontSize: 18.0,

@@ -35,10 +35,6 @@ class _IntroScreenState extends State<IntroScreen> {
                         height: 25.0,
                         child: RiveAnimation.asset('assets/images/venu-logo.riv'),
                       ),
-                      // Image.asset(
-                      //   'assets/images/logo.png',
-                      //   width: 75.0,
-                      // ),
                       Container(
                           margin: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 50.0),
