@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:venu/screens/venues/review_card.dart';
 
 class Venues extends StatefulWidget {
   final List venues;
@@ -24,12 +25,13 @@ class _VenuesState extends State<Venues> {
           pages: widget.venues
               .map(
                 (venue) => PageViewModel(
+                  useScrollView: true,
                   titleWidget: Container(
                     margin: const EdgeInsets.symmetric(
                         vertical: 0.0, horizontal: 40.0),
-                    child: Text(
-                      venue['name'],
-                      style: const TextStyle(
+                    child: const Text(
+                      'Get to know the venue!',
+                      style: TextStyle(
                         fontFamily: 'Google-Sans',
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -37,17 +39,15 @@ class _VenuesState extends State<Venues> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  bodyWidget: Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 0.0, horizontal: 20.0),
-                    child: Text(
-                      'Some shizz which shuld be atleast 4 -5 lines ajnakjbfjsdbfksbdfksbfsdfbsjfkdbskfbsjdfbjskdbjfbsjdbfbskdf dlksdgdjksdgsd gopsdjgsd gsdmgksdljg sdghsdlkgdslkg siogjsdoigsdmgnsd lkghsd gsdogkhs',
-                      style: TextStyle(
-                        fontFamily: 'Google-Sans',
-                        fontSize: 14.0,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                  bodyWidget: Column(
+                    children: venue['reviews']
+                        .map<Widget>((review) => ReviewCard(
+                            reviewerName: review['name'],
+                            reviewedAgo: review['timeText'],
+                            reviewText: review['description'],
+                            reviewerImageUrl: review['authorImg'],
+                            noOfStars: review['rating']))
+                        .toList(),
                   ),
                   image: Container(
                     margin: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
@@ -59,7 +59,9 @@ class _VenuesState extends State<Venues> {
                           padding: EdgeInsets.fromLTRB(0.0, 0.0,
                               MediaQuery.of(context).size.width * 0.85, 0.0),
                           child: GestureDetector(
-                            onTap: (){Navigator.pop(context);},
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
                             child: const FaIcon(
                               FontAwesomeIcons.angleLeft,
                               color: Colors.black,
@@ -67,9 +69,24 @@ class _VenuesState extends State<Venues> {
                           ),
                         ),
                         Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 20.0),
+                            child: Text(
+                              venue['name'],
+                              style: const TextStyle(
+                                fontFamily: 'Google-Sans',
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        Center(
                           child: CircleAvatar(
-                            radius: MediaQuery.of(context).size.width * 0.35,
-                            backgroundImage: NetworkImage(venue['pictures'].isEmpty?'https://akm-img-a-in.tosshub.com/indiatoday/images/story/202201/Restaurants__PTI__1200x768.jpeg?IeIiIAwChp5Ze3RNH1mi3Q2xMtf.KkTs&size=770:433':venue['pictures'][0]),
+                            radius: MediaQuery.of(context).size.width * 0.32,
+                            backgroundImage: NetworkImage(venue['pictures'][0]),
                           ),
                         ),
                       ],
@@ -80,7 +97,8 @@ class _VenuesState extends State<Venues> {
                         horizontal: 40.0, vertical: 0.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await launchUrl(Uri.parse(venue['url']),mode: LaunchMode.externalApplication);
+                        await launchUrl(Uri.parse(venue['url']),
+                            mode: LaunchMode.externalApplication);
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 56),
@@ -98,7 +116,7 @@ class _VenuesState extends State<Venues> {
                     ),
                   ),
                   decoration: const PageDecoration(
-                    imageFlex: 5,
+                    imageFlex: 6,
                     bodyFlex: 4,
                   ),
                 ),
@@ -126,7 +144,9 @@ class _VenuesState extends State<Venues> {
               color: Colors.black26,
               spacing: const EdgeInsets.symmetric(horizontal: 3.0),
               activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0))),
+                  borderRadius: BorderRadius.circular(25.0)
+              )
+          ),
         ),
       ),
     );

@@ -49,22 +49,9 @@ class _InsideRoomState extends State<InsideRoom> {
     super.initState();
     response = getRoomDetails();
     response.then((value) {
-      String temp = '';
-      value['result']['gpEncoding'][0] > 0
-          ? temp = '${temp}i'
-          : temp = '${temp}e';
-      value['result']['gpEncoding'][0] > 0
-          ? temp = '${temp}n'
-          : temp = '${temp}s';
-      value['result']['gpEncoding'][0] > 0
-          ? temp = '${temp}f'
-          : temp = '${temp}t';
-      value['result']['gpEncoding'][0] > 0
-          ? temp = '${temp}p'
-          : temp = '${temp}j';
       setState(() {
         users = value['result']['users'];
-        groupPer = temp;
+        groupPer = value['result']['personality'];
         suggestionIds = value['result']['suggestions'];
       });
     });
@@ -307,7 +294,7 @@ class _InsideRoomState extends State<InsideRoom> {
                           const SizedBox(
                             height: 40.0,
                           ),
-                          Image.asset('assets/images/$groupPer.png'),
+                          Image.asset('assets/images/${groupPer.toLowerCase()}.png'),
                           const SizedBox(
                             height: 20.0,
                           ),

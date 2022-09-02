@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RoomCard extends StatefulWidget {
-  late final String roomName;
-  late final String roomCode;
-  late final int noOfPpl;
+  final String roomName;
+  final String roomCode;
+  final int noOfPpl;
 
-  RoomCard({Key? key, required String roomName, required String roomCode, required int noOfPpl}) : super(key: key){
-    this.roomName = roomName;
-    this.roomCode = roomCode;
-    this.noOfPpl = noOfPpl;
-  }
+  const RoomCard({Key? key, required this.roomName, required this.roomCode, required this.noOfPpl}) : super(key: key);
 
   @override
   State<RoomCard> createState() => _RoomCardState();
