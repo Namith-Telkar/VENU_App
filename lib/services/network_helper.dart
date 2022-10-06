@@ -144,6 +144,48 @@ class NetworkHelper {
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
+      result['result'] = responseObject['roomDetails'];
+      result['venueTypes'] = responseObject['venueTypes'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> getUsersInRoom(
+      String googleToken, String roomId) async {
+    var url = Uri.parse('$endpoint/api/user/getUsersInRoom');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': googleToken,
+          'roomId': roomId,
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    print(responseObject);
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['result'] = responseObject['result'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> leaveRoom(
+      String googleToken, String roomId) async {
+    var url = Uri.parse('$endpoint/api/user/leaveRoom');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': googleToken,
+          'roomId': roomId,
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    if (responseObject['success']) {
+      result['success'] = true;
       result['result'] = responseObject['result'];
       return result;
     }
@@ -170,19 +212,44 @@ class NetworkHelper {
     return result;
   }
 
-  static Future<Map<String,dynamic>> getPredictions(String googleToken, String roomId) async {
+  static Future<Map<String,dynamic>> getPredictions(String googleToken, String roomId, String venueType) async {
     var url = Uri.parse('$endpoint/api/user/getPredictions');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'token': googleToken,
           'roomId': roomId,
+          'venueType' : venueType,
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String,dynamic>> updateRoomUserLocation(Map<String, dynamic> userDetails) async{
+    var url = Uri.parse('$endpoint/api/user/updateRoomUserLocation');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': userDetails['googleToken'],
+          'roomId': userDetails['roomId'],
+          'location': {
+            'lat': userDetails['latitude'],
+            'lng': userDetails['longitude'],
+          }
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    print(responseObject);
+    if (responseObject['success']) {
+      result['success'] = true;
       return result;
     }
     result['success'] = false;

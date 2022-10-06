@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:venu/screens/inside_room/preference_dialog.dart';
 import 'package:venu/screens/room_settings/room_settings.dart';
 import 'package:venu/screens/venues/venues.dart';
 import 'package:venu/services/dialog_manager.dart';
@@ -22,6 +23,7 @@ class _InsideRoomState extends State<InsideRoom> {
   late Map<String, dynamic> suggestionIds;
   String groupPer = '';
   List users = [];
+  List<String> venueTypes = [];
 
   Future<Map<String, dynamic>> getRoomDetails() async {
     Map<String, dynamic> result = {};
@@ -30,17 +32,19 @@ class _InsideRoomState extends State<InsideRoom> {
     return result;
   }
 
+  Future<void> getUsersInRoom() async {
+    Map<String, dynamic> result = {};
+    String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+    result = await NetworkHelper.getUsersInRoom(googleToken, widget.roomId);
+    setState(() {
+      users = result['result'];
+    });
+  }
+
   Future<List> getSuggestions() async {
     Map<String, dynamic> result = {};
     String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
     result = await NetworkHelper.getSuggestions(googleToken, suggestionIds);
-    return result['venues'];
-  }
-
-  Future<List> getPredictions() async {
-    Map<String, dynamic> result = {};
-    String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
-    result = await NetworkHelper.getPredictions(googleToken, widget.roomId);
     return result['venues'];
   }
   
@@ -50,9 +54,9 @@ class _InsideRoomState extends State<InsideRoom> {
     response = getRoomDetails();
     response.then((value) {
       setState(() {
-        users = value['result']['users'];
         groupPer = value['result']['personality'];
         suggestionIds = value['result']['suggestions'];
+        value['venueTypes'].forEach((k,v) => venueTypes.add(k));
       });
     });
   }
@@ -200,8 +204,9 @@ class _InsideRoomState extends State<InsideRoom> {
                                               ),
                                               trailing: GestureDetector(
                                                 onTap: () {
-                                                  Navigator.pushNamed(context,
-                                                      RoomSettings.routeName);
+                                                  Navigator.of(context).push(MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RoomSettings(roomId: widget.roomId)));
                                                 },
                                                 child: const FaIcon(
                                                   FontAwesomeIcons.gear,
@@ -266,8 +271,11 @@ class _InsideRoomState extends State<InsideRoom> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+                                DialogManager.showLoadingDialog(context);
+                                await getUsersInRoom();
                                 Scaffold.of(context).openEndDrawer();
+                                DialogManager.hideDialog(context);
                               },
                               child: const FaIcon(
                                 FontAwesomeIcons.userGroup,
@@ -391,13 +399,7 @@ class _InsideRoomState extends State<InsideRoom> {
                             horizontal: 40.0, vertical: 0.0),
                         child: ElevatedButton(
                           onPressed: () async {
-                            DialogManager.showLoadingDialog(context);
-                            List venues =
-                            await getPredictions();
-                            DialogManager.hideDialog(context);
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    Venues(venues: venues)));
+                            DialogManager.showCustomDialog(context, PreferencesDialog(venueTypes: venueTypes,roomId: widget.roomId,), true);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),

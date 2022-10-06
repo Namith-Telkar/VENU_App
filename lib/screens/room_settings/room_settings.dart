@@ -1,10 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:location/location.dart';
+import 'package:venu/screens/landing/landing.dart';
+import 'package:venu/services/dialog_manager.dart';
+import 'package:venu/services/network_helper.dart';
 
 class RoomSettings extends StatefulWidget {
-  static const routeName = '/room_settings';
-  const RoomSettings({Key? key}) : super(key: key);
+  final String roomId;
+  const RoomSettings({required this.roomId, Key? key}) : super(key: key);
 
   @override
   State<RoomSettings> createState() => _RoomSettingsState();
@@ -14,6 +19,30 @@ class _RoomSettingsState extends State<RoomSettings> {
   bool switchValue = true;
   String lat = '';
   String lng = '';
+
+  Location location = Location();
+
+  late bool serviceEnabled;
+  late PermissionStatus permissionGranted;
+  late LocationData locationData;
+
+  Future<LocationData> getLocation() async{
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+    }
+
+    if(!serviceEnabled || permissionGranted != PermissionStatus.granted){
+      //show error
+    }
+    locationData = await location.getLocation();
+    return locationData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +220,28 @@ class _RoomSettingsState extends State<RoomSettings> {
               margin: const EdgeInsets.symmetric(
                   horizontal: 70.0, vertical: 00.0),
               child: ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  Map<String,dynamic> userDetails = {};
+                  userDetails['googleToken'] = await FirebaseAuth.instance.currentUser!.getIdToken();
+                  userDetails['roomId'] = widget.roomId;
+                  if(switchValue){
+                    await getLocation();
+                    userDetails['latitude'] = locationData.latitude;
+                    userDetails['longitude'] = locationData.longitude;
+                  }
+                  else{
+                    userDetails['latitude'] = num.tryParse(lat)?.toDouble();
+                    userDetails['longitude'] = num.tryParse(lng)?.toDouble();
+                  }
+                  Map<String,dynamic> response = {};
+                  response = await NetworkHelper.updateRoomUserLocation(userDetails);
+                  if(response['success']){
+                    DialogManager.showErrorDialog('Location Updated Successfully', context, false, (){
+                      DialogManager.hideDialog(context);
+                      Navigator.of(context).pop();
+                    });
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   primary: const Color(0xffA7D1D7),
@@ -203,6 +253,30 @@ class _RoomSettingsState extends State<RoomSettings> {
                     fontSize: 14.0,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: switchValue? MediaQuery.of(context).size.height*0.35:MediaQuery.of(context).size.height*0.2,
+            ),
+            GestureDetector(
+              onTap: () async {
+                String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+                await NetworkHelper.leaveRoom(googleToken, widget.roomId);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, Landing.routeName);
+              },
+              child: const Center(
+                child: Text(
+                  'Exit Room',
+                  style: TextStyle(
+                    fontFamily: "Google-Sans",
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.red,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
               ),
