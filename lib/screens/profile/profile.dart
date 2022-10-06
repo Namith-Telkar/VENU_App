@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
@@ -29,61 +30,135 @@ class _ProfileState extends State<Profile> {
             resizeToAvoidBottomInset: false,
             body: SafeArea(
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                child: Stack(
                   children: [
-                    const SizedBox(
-                      height: 20.0,
+                    Image.asset(
+                        'assets/images/profile_background.png',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
                     ),
-                    CircleAvatar(
-                      radius: 75.0,
-                      backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL as String),
-                    ),
-                    Text(
-                      FirebaseAuth.instance.currentUser!.displayName as String,
-                      style: const TextStyle(
-                        fontFamily: 'Google-Sans',
-                        fontSize: 22.0,
-                      ),
-                    ),
-                    Text(
-                      'Personality type : ${StoreProvider.of<AppState>(appStateContext).state.user?.personality}',
-                      style: const TextStyle(
-                        fontFamily: 'Google-Sans',
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 0.0),
-                      child:ElevatedButton(
-                        onPressed: () async {
-                          final provider =
-                          Provider.of<GoogleSignInProvider>(
-                              context,
-                              listen: false);
-                          await provider.logout();
-                          Navigator.pushReplacementNamed(context, SignIn.routeName);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: const StadiumBorder(),
-                          minimumSize:
-                          const Size(double.infinity, 56),
-                          primary: const Color(0xffA7D1D7),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const SizedBox(
+                          height: 5.0,
                         ),
-                        child: const Text(
-                          'Sign out',
-                          style: TextStyle(
-                            fontFamily: "Google-Sans",
+                        CircleAvatar(
+                          radius: 50.0,
+                          backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL as String),
+                        ),
+                        Text(
+                          '${StoreProvider.of<AppState>(appStateContext).state.user?.personality}',
+                          style: const TextStyle(
+                            fontFamily: 'Google-Sans',
                             fontSize: 18.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height*0.2,
+                        Text(
+                          FirebaseAuth.instance.currentUser!.displayName as String,
+                          style: const TextStyle(
+                            fontFamily: 'Google-Sans',
+                            fontSize: 22.0,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                          child: Text(
+                            '${StoreProvider.of<AppState>(appStateContext).state.user?.personalityDescription}',
+                            style: const TextStyle(
+                              fontFamily: 'Google-Sans',
+                              fontSize: 16.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*0.15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.coins,
+                              size: 18.0,
+                            ),
+                            Text(
+                              ' Credits : ${StoreProvider.of<AppState>(appStateContext).state.user?.credits.toString()}',
+                              style: const TextStyle(
+                                fontFamily: 'Google-Sans',
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*0.05,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.35,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 0.0),
+                              child:ElevatedButton(
+                                onPressed: () async {
+                                  final provider =
+                                  Provider.of<GoogleSignInProvider>(
+                                      context,
+                                      listen: false);
+                                  await provider.logout();
+                                  Navigator.pushReplacementNamed(context, SignIn.routeName);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(double.infinity, 50),
+                                  primary: const Color(0xffA7D1D7),
+                                ),
+                                child: const Text(
+                                  'Edit Profile',
+                                  style: TextStyle(
+                                    fontFamily: "Google-Sans",
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.35,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 0.0),
+                              child:ElevatedButton(
+                                onPressed: () async {
+                                  final provider =
+                                  Provider.of<GoogleSignInProvider>(
+                                      context,
+                                      listen: false);
+                                  await provider.logout();
+                                  Navigator.pushReplacementNamed(context, SignIn.routeName);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(double.infinity, 50),
+                                  primary: const Color(0xffA7D1D7),
+                                ),
+                                child: const Text(
+                                  'Sign out',
+                                  style: TextStyle(
+                                    fontFamily: "Google-Sans",
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*0.05,
+                        ),
+                      ],
                     ),
                   ],
                 ),

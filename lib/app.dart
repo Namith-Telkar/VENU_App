@@ -66,7 +66,6 @@ class _AppState extends State<App> {
                   Room.routeName: (context) => const Room(),
                   Home.routeName: (context) => const Home(),
                   Landing.routeName: (context) => const Landing(),
-                  RoomSettings.routeName: (context) => const RoomSettings(),
                 },
               );
             }

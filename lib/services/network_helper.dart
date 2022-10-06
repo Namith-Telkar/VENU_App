@@ -29,6 +29,7 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
@@ -95,7 +96,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['roomName'] = responseObject['name'];
@@ -163,7 +163,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['result'];
@@ -223,7 +222,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];
@@ -247,7 +245,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       return result;
