@@ -66,9 +66,48 @@ class _VenuesState extends State<Venues> {
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),
                         Center(
-                          child: CircleAvatar(
-                            radius: MediaQuery.of(context).size.width * 0.32,
-                            child: Image.network(venue['pictures'][0]),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.50,
+                            height: MediaQuery.of(context).size.width * 0.50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: NetworkImage(venue['pictures'][0]),
+                                  fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Center(
+                        //   child: CircleAvatar(
+                        //     radius: MediaQuery.of(context).size.width * 0.32,
+                        //     child: Image.network(venue['pictures'][0]),
+                        //   ),
+                        // ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.05,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 40.0, vertical: 0.0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              await launchUrl(Uri.parse(venue['url']),
+                                  mode: LaunchMode.externalApplication);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 56),
+                              primary: const Color(0xffA7D1D7),
+                            ),
+                            child: const Text(
+                              'Check on Google Maps',
+                              style: TextStyle(
+                                fontFamily: "Google-Sans",
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -102,32 +141,6 @@ class _VenuesState extends State<Venues> {
                                     reviewerImageUrl: review['authorImg'],
                                     noOfStars: review['rating']))
                                 .toList(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.05,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 40.0, vertical: 0.0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await launchUrl(Uri.parse(venue['url']),
-                                  mode: LaunchMode.externalApplication);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 56),
-                              primary: const Color(0xffA7D1D7),
-                            ),
-                            child: const Text(
-                              'Check on Google Maps',
-                              style: TextStyle(
-                                fontFamily: "Google-Sans",
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
                           ),
                         ),
                         SizedBox(
@@ -248,20 +261,21 @@ class _VenuesState extends State<Venues> {
           back: const Icon(
             Icons.navigate_before,
             color: Color(0xffA7D1D7),
+            size: 40.0,
           ),
           skip: const Icon(Icons.skip_next),
-          next: const Icon(Icons.navigate_next, color: Color(0xffA7D1D7)),
+          next: const Icon(Icons.navigate_next, color: Color(0xffA7D1D7), size: 40.0,),
           done: const Text(""),
           dotsDecorator: DotsDecorator(
-              size: const Size.square(10.0),
-              activeSize: const Size(20.0, 10.0),
+              size: const Size.square(6.0),
+              activeSize: const Size(15.0, 10.0),
               activeColor: const Color(0xffA7D1D7),
               color: Colors.black26,
-              spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+              spacing: const EdgeInsets.symmetric(horizontal: 2.0),
               activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0))),
+                  borderRadius: BorderRadius.circular(15.0))),
           dotsContainerDecorator: BoxDecoration(
-            color: Colors.white.withOpacity(0.75)
+            color: Colors.white.withOpacity(0.90)
           ),
         ),
       ),

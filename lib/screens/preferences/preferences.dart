@@ -8,6 +8,7 @@ import 'package:venu/models/venuUser.dart';
 import 'package:venu/redux/actions.dart';
 import 'package:venu/redux/store.dart';
 import 'package:venu/screens/landing/landing.dart';
+import 'package:venu/screens/preferences/manual_preferences.dart';
 import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/services/network_helper.dart';
 
@@ -75,7 +76,7 @@ class _PreferencesState extends State<Preferences> {
                     'Tell us about you',
                     style: TextStyle(
                       fontFamily: "Google-Sans",
-                      fontSize: 22.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -172,7 +173,7 @@ class _PreferencesState extends State<Preferences> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
                     child: ElevatedButton(
                       onPressed: () async {
                         if (isChecked) {
@@ -206,6 +207,76 @@ class _PreferencesState extends State<Preferences> {
                       ),
                       child: const Text(
                         'Submit',
+                        style: TextStyle(
+                          fontFamily: "Google-Sans",
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: const [
+                      Expanded(
+                          child: Divider(
+                            thickness: 3.0,
+                            color: Color(0xff8A8A8E),
+                            endIndent: 10.0,
+                            indent: 10.0,
+                          )
+                      ),
+                      Text(
+                          'or',
+                        style: TextStyle(
+                          fontFamily: 'Google-Sans',
+                          fontSize: 18.0,
+                          color: Color(0xff8A8A8E),
+                        ),
+                      ),
+                      Expanded(
+                          child: Divider(
+                            thickness: 3.0,
+                            color: Color(0xff8A8A8E),
+                            endIndent: 10.0,
+                            indent: 10.0,
+                          )
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 40.0),
+                    child: const Text(
+                      'Don\'t have a Twitter account? It\'s fine \n Select your personality manually',
+                      style: TextStyle(
+                        fontFamily: "Google-Sans",
+                        fontSize: 16.0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        Navigator.pushNamed(context, ManualPreferences.routeName);
+                      },
+                      style: OutlinedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        minimumSize:
+                        const Size(double.infinity, 56),
+                        primary: Colors.white,
+                        side: const BorderSide(
+                          color: Color(0xffA7D1D7),
+                          width: 3.0,
+                        ),
+                      ),
+                      child: const Text(
+                        'Select Personality',
                         style: TextStyle(
                           fontFamily: "Google-Sans",
                           fontSize: 18.0,

@@ -42,6 +42,7 @@ class NetworkHelper {
   static Future<Map<String, dynamic>> addUser(
       Map<String, dynamic> userDetails) async {
     var url = Uri.parse('$endpoint/api/user/addDetails');
+    print(userDetails['twitterHandle']);
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -54,6 +55,33 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print(responseObject);
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['userDetails'] = responseObject['user'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> addUserP(
+      Map<String, dynamic> userDetails) async {
+    var url = Uri.parse('$endpoint/api/user/addDetails');
+    print(userDetails['twitterHandle']);
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': userDetails['googleToken'],
+          'personality': userDetails['twitterHandle'],
+          'location': {
+            'lat': userDetails['latitude'],
+            'lng': userDetails['longitude'],
+          }
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['userDetails'] = responseObject['user'];
@@ -142,6 +170,7 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['roomDetails'];
@@ -183,6 +212,7 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['result'];
@@ -247,6 +277,46 @@ class NetworkHelper {
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> updateTwitterHandle(String googleToken, String twitterId) async {
+    var url = Uri.parse('$endpoint/api/user/updatePersonality');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': googleToken,
+          'twitter': twitterId
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    print(responseObject);
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['user'] = responseObject['user'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> updatePersonality(String googleToken, String personality) async {
+    var url = Uri.parse('$endpoint/api/user/updatePersonality');
+    var response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': googleToken,
+          'personality': personality,
+        }));
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    print(responseObject);
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['user'] = responseObject['user'];
       return result;
     }
     result['success'] = false;

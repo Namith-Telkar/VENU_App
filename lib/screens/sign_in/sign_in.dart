@@ -114,7 +114,7 @@ class SignIn extends StatelessWidget {
                                     ),
                                     Container(
                                       margin: const EdgeInsets.symmetric(
-                                          horizontal: 20.0, vertical: 0.0),
+                                          horizontal: 40.0, vertical: 0.0),
                                       child: ElevatedButton.icon(
                                         onPressed: () async {
                                           final provider =
@@ -171,7 +171,7 @@ class SignIn extends StatelessWidget {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0, vertical: 0.0),
+                                          horizontal: 40.0, vertical: 0.0),
                                       child: OutlinedButton.icon(
                                         onPressed: () async {
                                           final provider =

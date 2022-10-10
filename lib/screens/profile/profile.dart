@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:venu/screens/profile/profile_settings.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/redux/store.dart';
@@ -101,18 +102,17 @@ class _ProfileState extends State<Profile> {
                               width: MediaQuery.of(context).size.width*0.35,
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 0.0),
-                              child:ElevatedButton(
-                                onPressed: () async {
-                                  final provider =
-                                  Provider.of<GoogleSignInProvider>(
-                                      context,
-                                      listen: false);
-                                  await provider.logout();
-                                  Navigator.pushReplacementNamed(context, SignIn.routeName);
+                              child:OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, ProfileSettings.routeName);
                                 },
-                                style: ElevatedButton.styleFrom(
+                                style: OutlinedButton.styleFrom(
                                   minimumSize: const Size(double.infinity, 50),
-                                  primary: const Color(0xffA7D1D7),
+                                  primary: Colors.white,
+                                  side: const BorderSide(
+                                    color: Color(0xffA7D1D7),
+                                    width: 3.0,
+                                  ),
                                 ),
                                 child: const Text(
                                   'Edit Profile',

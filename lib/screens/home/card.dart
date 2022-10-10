@@ -40,16 +40,16 @@ class _RoomCardState extends State<RoomCard> {
                       fontSize: 16.0,
                     ),
                   ),
-                  Text(
-                    widget.roomCode,
-                    style: const TextStyle(
-                        fontFamily: "Google-Sans",
-                        fontSize: 14.0,
-                        color: Color(0xff8A8A8E)
-                    ),
-                  ),
+                  // Text(
+                  //   widget.roomCode,
+                  //   style: const TextStyle(
+                  //       fontFamily: "Google-Sans",
+                  //       fontSize: 14.0,
+                  //       color: Color(0xff8A8A8E)
+                  //   ),
+                  // ),
                   const SizedBox(
-                    height: 20.0,
+                    height: 25.0,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,

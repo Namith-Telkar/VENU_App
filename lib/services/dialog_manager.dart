@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:venu/widgets/loading_alert_dialog.dart';
 
 import '../widgets/error_dialog.dart';
 import '../widgets/loading_dialog.dart';
@@ -60,6 +61,22 @@ class DialogManager {
             title: errorMessage,
             okFunction: okPressed,
           ),
+        );
+      },
+    );
+  }
+
+  static void showTransparentDialog(
+      BuildContext context,
+      bool barrierDismissible,
+      ) {
+    showDialog(
+      barrierDismissible: barrierDismissible,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => barrierDismissible,
+          child: const LoadingTransparentDialog(),
         );
       },
     );

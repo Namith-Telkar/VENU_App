@@ -262,10 +262,12 @@ class _RoomSettingsState extends State<RoomSettings> {
             ),
             GestureDetector(
               onTap: () async {
+                DialogManager.showLoadingDialog(context);
                 String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
                 await NetworkHelper.leaveRoom(googleToken, widget.roomId);
                 Navigator.pop(context);
                 Navigator.pop(context);
+                DialogManager.hideDialog(context);
                 Navigator.pushReplacementNamed(context, Landing.routeName);
               },
               child: const Center(
