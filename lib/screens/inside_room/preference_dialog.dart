@@ -8,22 +8,26 @@ import 'package:venu/services/dialog_manager.dart';
 import '../../services/network_helper.dart';
 
 class PreferencesDialog extends StatefulWidget {
-  final List<String> venueTypes;
+  final Map<String,dynamic> venueTypes;
   final String roomId;
 
-  const PreferencesDialog({required this.venueTypes, required this.roomId, Key? key}) : super(key: key);
+  const PreferencesDialog(
+      {required this.venueTypes, required this.roomId, Key? key})
+      : super(key: key);
 
   @override
   State<PreferencesDialog> createState() => _PreferencesDialogState();
 }
 
 class _PreferencesDialogState extends State<PreferencesDialog> {
-  late String _preference = widget.venueTypes[0];
+  late List<String> venueTypesList = widget.venueTypes.entries.map((e) => e.key).toList();
+  late String _preference = venueTypesList[0];
 
   Future<List> getPredictions() async {
     Map<String, dynamic> result = {};
     String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
-    result = await NetworkHelper.getPredictions(googleToken, widget.roomId, _preference.toLowerCase());
+    result = await NetworkHelper.getPredictions(
+        googleToken, widget.roomId, _preference.toLowerCase());
     return result['venues'];
   }
 
@@ -58,9 +62,10 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
               textAlign: TextAlign.center,
             ),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20.0),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20.0),
               child: DropdownButtonFormField<String>(
-                items: widget.venueTypes.map((String value) {
+                items: venueTypesList.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -77,7 +82,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
                 ),
                 onChanged: (newValue) {
                   setState(() {
-                    _preference = newValue!;
+                    _preference = widget.venueTypes['value'];
                   });
                 },
                 style: const TextStyle(
@@ -91,18 +96,19 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 30.0, vertical: 10.0),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
               child: ElevatedButton(
                 onPressed: () async {
                   DialogManager.showLoadingDialog(context);
-                  List venues =
-                  await getPredictions();
+                  List venues = await getPredictions();
                   DialogManager.hideDialog(context);
                   DialogManager.hideDialog(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          Venues(venues: venues)));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Venues(venues: venues),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),

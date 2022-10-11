@@ -62,6 +62,20 @@ class _VenuesState extends State<Venues> {
                             ),
                           ),
                         ),
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 20.0),
+                            child: Text(
+                              '${venue['similarity'].toString()}% Match!',
+                              style: const TextStyle(
+                                fontFamily: 'Google-Sans',
+                                fontSize: 14.0,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),

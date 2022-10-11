@@ -29,7 +29,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
@@ -42,7 +41,6 @@ class NetworkHelper {
   static Future<Map<String, dynamic>> addUser(
       Map<String, dynamic> userDetails) async {
     var url = Uri.parse('$endpoint/api/user/addDetails');
-    print(userDetails['twitterHandle']);
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -55,7 +53,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['userDetails'] = responseObject['user'];
@@ -68,7 +65,6 @@ class NetworkHelper {
   static Future<Map<String, dynamic>> addUserP(
       Map<String, dynamic> userDetails) async {
     var url = Uri.parse('$endpoint/api/user/addDetails');
-    print(userDetails['twitterHandle']);
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -81,7 +77,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['userDetails'] = responseObject['user'];
@@ -170,7 +165,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['roomDetails'];
@@ -212,7 +206,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['result'] = responseObject['result'];
@@ -232,6 +225,7 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print(responseObject['result'][0]['similarity']);
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];
@@ -293,7 +287,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
@@ -313,7 +306,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];

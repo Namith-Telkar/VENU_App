@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:venu/screens/inside_room/preference_dialog.dart';
 import 'package:venu/screens/room_settings/room_settings.dart';
 import 'package:venu/screens/venues/venues.dart';
@@ -23,7 +24,9 @@ class _InsideRoomState extends State<InsideRoom> {
   late Map<String, dynamic> suggestionIds;
   String groupPer = '';
   List users = [];
-  List<String> venueTypes = [];
+  Map<String,dynamic> venueTypes = {};
+  double lng = 0.0;
+  double lat = 0.0;
 
   Future<Map<String, dynamic>> getRoomDetails() async {
     Map<String, dynamic> result = {};
@@ -56,7 +59,9 @@ class _InsideRoomState extends State<InsideRoom> {
       setState(() {
         groupPer = value['result']['personality'];
         suggestionIds = value['result']['suggestions'];
-        value['venueTypes'].forEach((k,v) => venueTypes.add(k));
+        venueTypes = value['venueTypes'];
+        lat = value['result']['location']['lat'];
+        lng = value['result']['location']['lng'];
       });
     });
   }
@@ -272,7 +277,7 @@ class _InsideRoomState extends State<InsideRoom> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                DialogManager.showLoadingDialog(context);
+                                DialogManager.showTransparentDialog(context, false);
                                 await getUsersInRoom();
                                 Scaffold.of(context).openEndDrawer();
                                 DialogManager.hideDialog(context);
@@ -396,6 +401,24 @@ class _InsideRoomState extends State<InsideRoom> {
                             ),
                           ),
                         ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            await launchUrl(Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng'),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          child: const Text(
+                            'View central location on Google Maps',
+                            style: TextStyle(
+                              fontFamily: 'Google-Sans',
+                              fontSize: 14.0,
+                              color: Color(0xff4295A5),
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(

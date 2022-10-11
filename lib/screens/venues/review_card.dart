@@ -56,11 +56,15 @@ class _ReviewCardState extends State<ReviewCard> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.reviewerName,
-                              style: const TextStyle(
-                                fontFamily: 'Google-Sans',
-                                fontSize: 14.0,
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*0.45,
+                              child: Text(
+                                widget.reviewerName,
+                                style: const TextStyle(
+                                  fontFamily: 'Google-Sans',
+                                  fontSize: 14.0,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Text(
