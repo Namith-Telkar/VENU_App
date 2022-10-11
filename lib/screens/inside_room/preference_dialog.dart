@@ -21,13 +21,14 @@ class PreferencesDialog extends StatefulWidget {
 
 class _PreferencesDialogState extends State<PreferencesDialog> {
   late List<String> venueTypesList = widget.venueTypes.entries.map((e) => e.key).toList();
-  late String _preference = venueTypesList[0];
+  late String preference = venueTypesList[0];
 
   Future<List> getPredictions() async {
     Map<String, dynamic> result = {};
     String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+    preference = widget.venueTypes[preference];
     result = await NetworkHelper.getPredictions(
-        googleToken, widget.roomId, _preference.toLowerCase());
+        googleToken, widget.roomId, preference.toLowerCase());
     return result['venues'];
   }
 
@@ -71,7 +72,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
                     child: Text(value),
                   );
                 }).toList(),
-                value: _preference,
+                value: preference,
                 hint: const Text(
                   'Pick a preference',
                   style: TextStyle(
@@ -82,7 +83,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
                 ),
                 onChanged: (newValue) {
                   setState(() {
-                    _preference = widget.venueTypes['value'];
+                    preference = newValue!;
                   });
                 },
                 style: const TextStyle(
