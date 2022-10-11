@@ -87,12 +87,17 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> getRooms(String googleToken) async {
+    print("get room called");
     var url = Uri.parse('$endpoint/api/user/getRooms');
-    var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
           'token': googleToken,
-        }));
+        },
+      ),
+    );
     Map<String, dynamic> responseObject = await jsonDecode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
@@ -215,7 +220,8 @@ class NetworkHelper {
     return result;
   }
 
-  static Future<Map<String,dynamic>> getSuggestions(String googleToken, Map<String,dynamic> suggestionIds) async {
+  static Future<Map<String, dynamic>> getSuggestions(
+      String googleToken, Map<String, dynamic> suggestionIds) async {
     var url = Uri.parse('$endpoint/api/user/getSuggestions');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -225,7 +231,7 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    print(responseObject['result'][0]['similarity']);
+    // print(responseObject['result'][0]['similarity']);
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];
@@ -235,27 +241,31 @@ class NetworkHelper {
     return result;
   }
 
-  static Future<Map<String,dynamic>> getPredictions(String googleToken, String roomId, String venueType) async {
+  static Future<Map<String, dynamic>> getPredictions(
+      String googleToken, String roomId, String venueType) async {
     var url = Uri.parse('$endpoint/api/user/getPredictions');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'token': googleToken,
           'roomId': roomId,
-          'venueType' : venueType,
+          'venueType': venueType,
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];
+      result['user'] = responseObject['user'];
+      result['room'] = responseObject['room'];
       return result;
     }
     result['success'] = false;
     return result;
   }
 
-  static Future<Map<String,dynamic>> updateRoomUserLocation(Map<String, dynamic> userDetails) async{
+  static Future<Map<String, dynamic>> updateRoomUserLocation(
+      Map<String, dynamic> userDetails) async {
     var url = Uri.parse('$endpoint/api/user/updateRoomUserLocation');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -277,14 +287,12 @@ class NetworkHelper {
     return result;
   }
 
-  static Future<Map<String, dynamic>> updateTwitterHandle(String googleToken, String twitterId) async {
+  static Future<Map<String, dynamic>> updateTwitterHandle(
+      String googleToken, String twitterId) async {
     var url = Uri.parse('$endpoint/api/user/updatePersonality');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'token': googleToken,
-          'twitter': twitterId
-        }));
+        body: jsonEncode({'token': googleToken, 'twitter': twitterId}));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
@@ -296,7 +304,8 @@ class NetworkHelper {
     return result;
   }
 
-  static Future<Map<String, dynamic>> updatePersonality(String googleToken, String personality) async {
+  static Future<Map<String, dynamic>> updatePersonality(
+      String googleToken, String personality) async {
     var url = Uri.parse('$endpoint/api/user/updatePersonality');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},

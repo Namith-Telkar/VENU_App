@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "800650856688-b9ii52fns2s3a09hj6siuvrnnnncsa8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.arnavdewan.venu",
+            "certificate_hash": "5d992cae7c11d991e1f5dbe5a0015eed8657fa1e"
+          }
+        },
+        {
+          "client_id": "800650856688-ovq4g21a8t4k20sk2nk746bpa2u5en28.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.arnavdewan.venu",
+            "certificate_hash": "77988773b3fe70a69ac3a7c55c7270a47fa475da"
+          }
+        },
+        {
           "client_id": "800650856688-mnod637kankagq2np8hoaiot1tmaip3s.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -10,6 +10,12 @@ AppState reducers(AppState prevState, dynamic action) {
     newState = AppState.copyWith(prev: prevState, darkTheme: action.darkTheme);
   } else if (action is UpdateNewUser) {
     newState = AppState.copyWith(prev: prevState, user: action.newUser);
+  } else if (action is UpdateRooms) {
+    newState = AppState.copyWith(
+      prev: prevState,
+      rooms: action.rooms,
+      roomsUpdated: action.roomsUpdated,
+    );
   } else {
     newState = AppState.copyWith(prev: prevState);
   }

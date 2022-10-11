@@ -14,7 +14,6 @@ class Room extends StatefulWidget {
 }
 
 class _RoomState extends State<Room> {
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffE5E5E5),
@@ -34,20 +33,20 @@ class _RoomState extends State<Room> {
               ),
               const SizedBox(
                 width: 175.0,
-                height: 225.0,
+                height: 200.0,
                 child: RiveAnimation.asset('assets/images/join_room.riv'),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 0.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    DialogManager.showCustomDialog(context, EnterRoomCode(), true);
+                    DialogManager.showCustomDialog(
+                        context, EnterRoomCode(), true);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
-                    minimumSize:
-                    const Size(double.infinity, 56),
+                    minimumSize: const Size(double.infinity, 56),
                     primary: const Color(0xffA7D1D7),
                   ),
                   child: const Text(
@@ -62,16 +61,16 @@ class _RoomState extends State<Room> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 0.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
                 child: OutlinedButton(
                   onPressed: () {
-                    DialogManager.showCustomDialog(context, CreateRoomCode(), true);
+                    DialogManager.showCustomDialog(
+                        context, CreateRoomCode(), true);
                   },
                   style: OutlinedButton.styleFrom(
                     shape: const StadiumBorder(),
-                    minimumSize:
-                    const Size(double.infinity, 56),
+                    minimumSize: const Size(double.infinity, 56),
                     primary: Colors.white,
                     side: const BorderSide(
                       color: Color(0xffA7D1D7),

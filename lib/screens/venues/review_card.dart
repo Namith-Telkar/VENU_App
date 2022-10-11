@@ -57,7 +57,7 @@ class _ReviewCardState extends State<ReviewCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width*0.45,
+                              width: MediaQuery.of(context).size.width * 0.30,
                               child: Text(
                                 widget.reviewerName,
                                 style: const TextStyle(

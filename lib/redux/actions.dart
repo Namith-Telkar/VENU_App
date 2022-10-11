@@ -13,3 +13,10 @@ class UpdateNewUser extends Action {
 
   UpdateNewUser({required this.newUser});
 }
+
+class UpdateRooms extends Action {
+  List<dynamic> rooms;
+  bool roomsUpdated;
+
+  UpdateRooms({required this.rooms, required this.roomsUpdated});
+}

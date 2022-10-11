@@ -41,7 +41,7 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
             ),
             Container(
               margin:
-              const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
               child: const Text(
                 'Share the code with your friends. They can join using this code',
                 style: TextStyle(
@@ -55,7 +55,7 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
         ),
       ),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height*0.3,
+        height: MediaQuery.of(context).size.height * 0.3,
         child: Center(
           child: Column(
             // mainAxisSize: MainAxisSize.min,
@@ -67,13 +67,13 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
                     horizontal: 15.0, vertical: 10.0),
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        color: const Color(0xffA7D1D7), width: 1.5)),
+                    border:
+                        Border.all(color: const Color(0xffA7D1D7), width: 1.5)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width:MediaQuery.of(context).size.height*0.14,
+                      width: MediaQuery.of(context).size.height * 0.14,
                       child: Text(
                         widget.roomId,
                         style: const TextStyle(
@@ -86,10 +86,15 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: (){
-                        Clipboard.setData(ClipboardData(text: widget.roomId)).then((_){
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: widget.roomId))
+                            .then((_) {
                           ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(content: Text('Copied to your clipboard !',style: TextStyle(fontFamily: 'Google-Sans'),)));
+                              .showSnackBar(const SnackBar(
+                                  content: Text(
+                            'Copied to your clipboard !',
+                            style: TextStyle(fontFamily: 'Google-Sans'),
+                          )));
                         });
                       },
                       child: Row(
@@ -99,7 +104,7 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
                             color: Colors.black54,
                           ),
                           Text(
-                            ' Copy code',
+                            ' Copy',
                             style: TextStyle(
                               fontFamily: "Google-Sans",
                               fontSize: 14.0,
@@ -114,7 +119,8 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 0.0,horizontal: 10.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                 child: Text(
                   'Room Name : ${widget.roomName}',
                   style: const TextStyle(
