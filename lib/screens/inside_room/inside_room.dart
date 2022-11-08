@@ -285,6 +285,13 @@ class _InsideRoomState extends State<InsideRoom> {
                                               fontSize: 14.0,
                                             ),
                                           ),
+                                          subtitle: Text(
+                                            '${users[index]['distance'].toString()} km',
+                                            style: const TextStyle(
+                                              fontFamily: 'Google-Sans',
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
                                         ),
                                   const SizedBox(
                                     height: 10.0,

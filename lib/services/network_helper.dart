@@ -87,7 +87,6 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> getRooms(String googleToken) async {
-    print("get room called");
     var url = Uri.parse('$endpoint/api/user/getRooms');
     var response = await http.post(
       url,
@@ -231,7 +230,6 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
-    // print(responseObject['result'][0]['similarity']);
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];
