@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 class NetworkHelper {
   NetworkHelper();
 
-  static String endpoint = 'https://venu-backend-api.herokuapp.com';
+  //static String endpoint = 'https://venu-backend-api.herokuapp.com';
+  static String endpoint = 'https://venu.arnavdewan.dev';
 
   static Future<bool> checkUserExists(String googleToken) async {
     var url = Uri.parse('$endpoint/api/user/getDetails');
@@ -173,6 +174,7 @@ class NetworkHelper {
       result['success'] = true;
       result['result'] = responseObject['roomDetails'];
       result['venueTypes'] = responseObject['venueTypes'];
+      print(responseObject['roomDetails']);
       return result;
     }
     result['success'] = false;
@@ -251,6 +253,8 @@ class NetworkHelper {
         }));
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
+    print('error error');
+    print(responseObject);
     if (responseObject['success']) {
       result['success'] = true;
       result['venues'] = responseObject['result'];

@@ -252,13 +252,15 @@ class _IntroScreenState extends State<IntroScreen> {
           next: const Icon(Icons.navigate_next, color: Color(0xffA7D1D7)),
           done: const Text(""),
           dotsDecorator: DotsDecorator(
-              size: const Size.square(10.0),
-              activeSize: const Size(20.0, 10.0),
-              activeColor: const Color(0xffA7D1D7),
-              color: Colors.black26,
-              spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-              activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0))),
+            size: const Size.square(10.0),
+            activeSize: const Size(20.0, 10.0),
+            activeColor: const Color(0xffA7D1D7),
+            color: Colors.black26,
+            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+            activeShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+          ),
         ),
       ),
     );

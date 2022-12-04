@@ -15,6 +15,7 @@ import 'package:venu/screens/preferences/preferences.dart';
 import 'package:venu/screens/profile/profile_settings.dart';
 import 'package:venu/screens/room/room.dart';
 import 'package:venu/screens/room_settings/room_settings.dart';
+import 'package:venu/screens/self_analysis/self_analysis.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 import 'package:venu/screens/splash_screen/splash_screen.dart';
 import 'package:venu/screens/venues/venues.dart';
@@ -59,7 +60,7 @@ class _AppState extends State<App> {
               return MaterialApp(
                 theme: Styles.themeData(state.darkTheme),
                 debugShowCheckedModeBanner: false,
-                //initialRoute: '/inside_room',
+                initialRoute: '/manual_preferences',
                 routes: {
                   SplashScreen.routeName: (context) => const SplashScreen(),
                   IntroScreen.routeName: (context) => IntroScreen(),
@@ -70,6 +71,7 @@ class _AppState extends State<App> {
                   Landing.routeName: (context) => const Landing(),
                   ProfileSettings.routeName: (context) => const ProfileSettings(),
                   ManualPreferences.routeName: (context) => const ManualPreferences(),
+                  SelfAnalysis.routeName: (context)=> const SelfAnalysis(),
                 },
               );
             }

@@ -9,6 +9,7 @@ import 'package:venu/models/venuUser.dart';
 import 'package:venu/redux/actions.dart';
 import 'package:venu/redux/store.dart';
 import 'package:venu/screens/landing/landing.dart';
+import 'package:venu/screens/self_analysis/self_analysis.dart';
 import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/services/network_helper.dart';
 
@@ -115,6 +116,75 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                     ),
                   ),
                 ),
+                Row(
+                  children: const [
+                    Expanded(
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Color(0xff8A8A8E),
+                          endIndent: 10.0,
+                          indent: 10.0,
+                        )
+                    ),
+                    Text(
+                      'or',
+                      style: TextStyle(
+                        fontFamily: 'Google-Sans',
+                        fontSize: 18.0,
+                        color: Color(0xff8A8A8E),
+                      ),
+                    ),
+                    Expanded(
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Color(0xff8A8A8E),
+                          endIndent: 10.0,
+                          indent: 10.0,
+                        )
+                    ),
+                  ],
+                ),
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 40.0),
+                    child: const Text(
+                      'Self analyse your personality. It will take about 2-3 min to complete',
+                      style: TextStyle(
+                        fontFamily: "Google-Sans",
+                        fontSize: 16.0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 0.0),
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      Navigator.pushNamed(context, SelfAnalysis.routeName);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      minimumSize:
+                      const Size(double.infinity, 56),
+                      primary: Colors.white,
+                      side: const BorderSide(
+                        color: Color(0xffA7D1D7),
+                        width: 3.0,
+                      ),
+                    ),
+                    child: const Text(
+                      'Pick your personality',
+                      style: TextStyle(
+                        fontFamily: "Google-Sans",
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
                 const Divider(
                   thickness: 3.0,
                   color: Color(0xff8A8A8E),
@@ -138,7 +208,7 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                 Center(
                   child: Container(
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 50.0, vertical: 20.0),
+                        horizontal: 70.0, vertical: 20.0),
                     child: DropdownButtonFormField<String>(
                       items: <String>[
                         'ENFJ',
@@ -185,6 +255,9 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                       ),
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffA7D1D7),width: 3.0),
+                        ),
                       ),
                     ),
                   ),
@@ -192,7 +265,7 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                 Center(
                   child: Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
+                    const EdgeInsets.symmetric(horizontal: 70.0, vertical: 0.0),
                     child: ElevatedButton(
                       onPressed: () async {
                           DialogManager.showLoadingDialog(context);

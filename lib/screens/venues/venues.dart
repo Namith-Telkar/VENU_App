@@ -303,11 +303,11 @@ class _VenuesState extends State<Venues> {
           done: const Text(""),
           dotsDecorator: DotsDecorator(
               size: const Size.square(
-                6.0,
+                5.0,
               ),
               activeSize: const Size(
-                15.0,
-                10.0,
+                12.0,
+                8.0,
               ),
               activeColor: const Color(0xffA7D1D7),
               color: Colors.black26,

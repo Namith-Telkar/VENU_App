@@ -136,7 +136,9 @@ class _ProfileState extends State<Profile> {
                                       context,
                                       listen: false);
                                   await provider.logout();
+                                  DialogManager.showLoadingDialog(context);
                                   Navigator.pushReplacementNamed(context, SignIn.routeName);
+                                  DialogManager.hideDialog(context);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(double.infinity, 50),

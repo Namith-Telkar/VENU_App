@@ -23,6 +23,7 @@ class _InsideRoomState extends State<InsideRoom> {
   late Future<Map<String, dynamic>> response;
   late Map<String, dynamic> suggestionIds;
   String groupPer = '';
+  String groupPerDesc = '';
   List users = [];
   List venues = [];
 
@@ -71,6 +72,7 @@ class _InsideRoomState extends State<InsideRoom> {
   void updateRoomDetails(Map<String, dynamic> value, List<dynamic> v) {
     setState(() {
       groupPer = value['personality'];
+      groupPerDesc = value['personalityDescription'];
       suggestionIds = value['suggestions'];
       lat = value['location']['lat'];
       lng = value['location']['lng'];
@@ -86,6 +88,7 @@ class _InsideRoomState extends State<InsideRoom> {
     response.then((value) {
       setState(() {
         groupPer = value['result']['personality'];
+        groupPerDesc = value['result']['personalityDescription'];
         suggestionIds = value['result']['suggestions'];
         venueTypes = value['venueTypes'];
         lat = value['result']['location']['lat'];
@@ -317,7 +320,7 @@ class _InsideRoomState extends State<InsideRoom> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         const SizedBox(
-                          height: 10.0,
+                          height: 0.0,
                         ),
                         Container(
                           margin: const EdgeInsets.symmetric(
@@ -362,10 +365,11 @@ class _InsideRoomState extends State<InsideRoom> {
                                 horizontal: 40.0,
                               ),
                               child: const Text(
-                                'Your groups personality',
+                                'Your group represents these traits',
                                 style: TextStyle(
                                   fontFamily: "Google-Sans",
                                   fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -384,7 +388,18 @@ class _InsideRoomState extends State<InsideRoom> {
                               groupPer.toUpperCase(),
                               style: const TextStyle(
                                 fontFamily: "Google-Sans",
-                                fontSize: 24.0,
+                                fontSize: 18.0,
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                              child: Text(
+                                groupPerDesc,
+                                style: const TextStyle(
+                                  fontFamily: "Google-Sans",
+                                  fontSize: 16.0,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],
@@ -515,7 +530,7 @@ class _InsideRoomState extends State<InsideRoom> {
                         ),
                         Container(
                           margin: const EdgeInsets.symmetric(
-                            horizontal: 40.0,
+                            horizontal: 80.0,
                             vertical: 0.0,
                           ),
                           child: ElevatedButton(

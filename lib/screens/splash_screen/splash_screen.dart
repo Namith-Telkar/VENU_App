@@ -12,7 +12,7 @@ import '../../redux/store.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
-  static const routeName = '/';
+  static const routeName = '/s';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
