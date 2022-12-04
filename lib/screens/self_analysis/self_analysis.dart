@@ -89,7 +89,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         eSelected = !eSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -136,7 +135,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         eSelected = !eSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -183,7 +181,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         sSelected = !sSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -231,7 +228,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         sSelected = !sSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -279,7 +275,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         tSelected = !tSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -324,7 +319,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         tSelected = !tSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -369,7 +363,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         jSelected = !jSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [
@@ -414,7 +407,6 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       setState(() {
                         jSelected = !jSelected;
                       });
-                      calculatePersonality();
                     },
                     child: TraitsCard(
                       traits: const [

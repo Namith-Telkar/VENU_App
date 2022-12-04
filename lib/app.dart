@@ -60,7 +60,7 @@ class _AppState extends State<App> {
               return MaterialApp(
                 theme: Styles.themeData(state.darkTheme),
                 debugShowCheckedModeBanner: false,
-                //initialRoute: '/manual_preferences',
+                //initialRoute: '/self_analysis',
                 routes: {
                   SplashScreen.routeName: (context) => const SplashScreen(),
                   IntroScreen.routeName: (context) => IntroScreen(),
