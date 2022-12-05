@@ -439,7 +439,7 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                     child: RiveAnimation.asset('assets/images/venu-logo.riv'),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.05,
                   ),
                   const Text(
                     'Your personality from the self-analysis test is',
@@ -450,7 +450,14 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  Image.asset(
+                    'assets/images/${calculatePersonality()}.png',
+                    height: MediaQuery.of(context).size.height * 0.15,
+                  ),
+                  const SizedBox(
+                    height: 20.0,
                   ),
                   Text(
                     calculatePersonality(),
@@ -460,7 +467,7 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   Center(
                     child: Padding(

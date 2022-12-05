@@ -64,10 +64,15 @@ class _ManualPreferencesState extends State<ManualPreferences> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 40.0, vertical: 20.0),
-                  child: FaIcon(FontAwesomeIcons.angleLeft),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 20.0),
+                    child: FaIcon(FontAwesomeIcons.angleLeft),
+                  ),
                 ),
                 const Center(
                   child: SizedBox(
@@ -175,7 +180,7 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                       ),
                     ),
                     child: const Text(
-                      'Pick your personality',
+                      'Find your personality',
                       style: TextStyle(
                         fontFamily: "Google-Sans",
                         fontSize: 16.0,

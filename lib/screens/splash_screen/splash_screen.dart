@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/screens/intro_screen/intro_screen.dart';
 import 'package:venu/screens/landing/landing.dart';
 import 'package:venu/services/network_helper.dart';
 
 import '../../models/venuUser.dart';
+import '../../provider/google_sign_in.dart';
 import '../../redux/actions.dart';
 import '../../redux/store.dart';
 
@@ -35,9 +37,16 @@ class _SplashScreenState extends State<SplashScreen> {
               );
               Navigator.pushReplacementNamed(context, Landing.routeName);
             }
+            else{
+              final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+              await provider.logout();
+              Navigator.pushReplacementNamed(context, IntroScreen.routeName);
+            }
           }
         else
-          {Navigator.pushReplacementNamed(context, IntroScreen.routeName);}
+          {
+            Navigator.pushReplacementNamed(context, IntroScreen.routeName);
+          }
       },
     );
   }
