@@ -14,10 +14,21 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
-
   Widget childWidget = const Home();
 
+  FloatingActionButton? _floatingActionButton;
+
+  void setFloatingActionButton(FloatingActionButton? floatingActionButton) {
+    setState(() {
+      _floatingActionButton = floatingActionButton;
+    });
+  }
+
   void _onItemTapped(int index) {
+    if (index != 1) {
+      setFloatingActionButton(null);
+    }
+
     setState(() {
       _selectedIndex = index;
     });
@@ -27,7 +38,9 @@ class _LandingState extends State<Landing> {
       });
     } else if (_selectedIndex == 1) {
       setState(() {
-        childWidget = const Room();
+        childWidget = Room(
+          setFloatingActionButton: setFloatingActionButton,
+        );
       });
     } else {
       setState(() {
@@ -45,28 +58,35 @@ class _LandingState extends State<Landing> {
         type: BottomNavigationBarType.shifting,
         items: const [
           BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.house,
-              ),
-              label: '\u2022'),
+            icon: FaIcon(
+              FontAwesomeIcons.house,
+            ),
+            label: '\u2022',
+          ),
           BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.plus,
-              ),
-              label: '\u2022'),
+            icon: FaIcon(
+              FontAwesomeIcons.peopleGroup,
+            ),
+            label: '\u2022',
+          ),
           BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.solidUser,
-              ),
-              label: '\u2022')
+            icon: FaIcon(
+              FontAwesomeIcons.solidUser,
+            ),
+            label: '\u2022',
+          )
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedLabelStyle: const TextStyle(
-            fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black),
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
         selectedItemColor: const Color(0xffA7D1D7),
         unselectedItemColor: Colors.black,
       ),
+      floatingActionButton: _floatingActionButton,
     );
   }
 }

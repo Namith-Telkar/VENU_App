@@ -66,16 +66,16 @@ class _AppState extends State<App> {
                   IntroScreen.routeName: (context) => IntroScreen(),
                   SignIn.routeName: (context) => const SignIn(),
                   Preferences.routeName: (context) => const Preferences(),
-                  Room.routeName: (context) => const Room(),
                   Home.routeName: (context) => const Home(),
                   Landing.routeName: (context) => const Landing(),
-                  ProfileSettings.routeName: (context) => const ProfileSettings(),
-                  ManualPreferences.routeName: (context) => const ManualPreferences(),
-                  SelfAnalysis.routeName: (context)=> const SelfAnalysis(),
+                  ProfileSettings.routeName: (context) =>
+                      const ProfileSettings(),
+                  ManualPreferences.routeName: (context) =>
+                      const ManualPreferences(),
+                  SelfAnalysis.routeName: (context) => const SelfAnalysis(),
                 },
               );
-            }
-            ),
+            }),
       ),
     );
   }

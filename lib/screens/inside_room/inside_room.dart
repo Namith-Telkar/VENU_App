@@ -13,7 +13,10 @@ import 'package:venu/services/network_helper.dart';
 class InsideRoom extends StatefulWidget {
   static const routeName = '/inside_room';
   final String roomId;
-  const InsideRoom({Key? key, required this.roomId}) : super(key: key);
+  const InsideRoom({
+    Key? key,
+    required this.roomId,
+  }) : super(key: key);
 
   @override
   State<InsideRoom> createState() => _InsideRoomState();
@@ -260,6 +263,14 @@ class _InsideRoomState extends State<InsideRoom> {
                                                   builder: (context) =>
                                                       RoomSettings(
                                                     roomId: widget.roomId,
+                                                    leaveRoom: () {
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context, {
+                                                        'roomId': widget.roomId,
+                                                        'leaveRoom': true,
+                                                      });
+                                                    },
                                                   ),
                                                 ),
                                               );
@@ -392,7 +403,8 @@ class _InsideRoomState extends State<InsideRoom> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 30.0),
                               child: Text(
                                 groupPerDesc,
                                 style: const TextStyle(

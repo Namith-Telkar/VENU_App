@@ -299,15 +299,32 @@ class _EnterRoomCodeState extends State<EnterRoomCode> {
                               userDetails['longitude'] =
                                   num.tryParse(lng)?.toDouble();
                             }
-                            Map<String, dynamic> response = {};
-                            response =
+                            Map<String, dynamic> response =
                                 await NetworkHelper.joinRoom(userDetails);
-                            // print(response);
-                            StoreProvider.of<AppState>(context).dispatch(
-                              UpdateRooms(rooms: [], roomsUpdated: true),
-                            );
-                            DialogManager.hideDialog(context);
-                            DialogManager.hideDialog(context);
+                            debugPrint(response.toString());
+                            if (response['success']) {
+                              StoreProvider.of<AppState>(context).dispatch(
+                                UpdateRooms(
+                                  rooms: response['roomList'],
+                                  roomsUpdated: false,
+                                ),
+                              );
+                              DialogManager.hideDialog(context);
+                              DialogManager.hideDialog(context);
+                            } else {
+                              DialogManager.hideDialog(context);
+                              DialogManager.hideDialog(context);
+                              DialogManager.showErrorDialog(
+                                'Error occured!',
+                                context,
+                                true,
+                                () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }
+
+                            // DialogManager.hideDialog(context);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),

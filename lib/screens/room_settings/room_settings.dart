@@ -13,7 +13,12 @@ import '../../redux/store.dart';
 
 class RoomSettings extends StatefulWidget {
   final String roomId;
-  const RoomSettings({required this.roomId, Key? key}) : super(key: key);
+  final Function leaveRoom;
+  const RoomSettings({
+    Key? key,
+    required this.roomId,
+    required this.leaveRoom,
+  }) : super(key: key);
 
   @override
   State<RoomSettings> createState() => _RoomSettingsState();
@@ -282,17 +287,7 @@ class _RoomSettingsState extends State<RoomSettings> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    DialogManager.showLoadingDialog(context);
-                    String googleToken =
-                        await FirebaseAuth.instance.currentUser!.getIdToken();
-                    await NetworkHelper.leaveRoom(googleToken, widget.roomId);
-                    StoreProvider.of<AppState>(context).dispatch(
-                      UpdateRooms(rooms: [], roomsUpdated: true),
-                    );
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    DialogManager.hideDialog(context);
-                    Navigator.pushReplacementNamed(context, Landing.routeName);
+                    widget.leaveRoom();
                   },
                   child: const Center(
                     child: Text(

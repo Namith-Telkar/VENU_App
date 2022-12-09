@@ -126,8 +126,7 @@ class NetworkHelper {
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
-      result['roomName'] = responseObject['name'];
-      result['userRoomList'] = responseObject['userRoomList'];
+      result['roomList'] = responseObject['roomList'] as List<dynamic>;
       result['roomDetails'] = responseObject['roomDetails'];
       return result;
     }

@@ -22,10 +22,10 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState,AppState>(
-      converter: (store) => store.state,
-      builder: (context,state) {
-        appStateContext = context;
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          appStateContext = context;
           return Scaffold(
             backgroundColor: const Color(0xffE5E5E5),
             resizeToAvoidBottomInset: false,
@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
                 child: Stack(
                   children: [
                     Image.asset(
-                        'assets/images/profile_background.png',
+                      'assets/images/profile_background.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
@@ -44,28 +44,37 @@ class _ProfileState extends State<Profile> {
                         const SizedBox(
                           height: 5.0,
                         ),
-                        CircleAvatar(
-                          radius: 50.0,
-                          backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL as String),
-                        ),
+                        FirebaseAuth.instance.currentUser != null
+                            ? CircleAvatar(
+                                radius: 50.0,
+                                backgroundImage: NetworkImage(
+                                  FirebaseAuth.instance.currentUser?.photoURL ??
+                                      '',
+                                ),
+                              )
+                            : const Text(''),
                         Text(
-                          '${StoreProvider.of<AppState>(appStateContext).state.user?.personality}',
+                          '${state.user?.personality}',
                           style: const TextStyle(
                             fontFamily: 'Google-Sans',
                             fontSize: 18.0,
                           ),
                         ),
                         Text(
-                          FirebaseAuth.instance.currentUser!.displayName as String,
+                          FirebaseAuth.instance.currentUser?.displayName ??
+                              'Unknown',
                           style: const TextStyle(
                             fontFamily: 'Google-Sans',
                             fontSize: 22.0,
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 0.0,
+                            horizontal: 20.0,
+                          ),
                           child: Text(
-                            '${StoreProvider.of<AppState>(appStateContext).state.user?.personalityDescription}',
+                            '${state.user?.personalityDescription}',
                             style: const TextStyle(
                               fontFamily: 'Google-Sans',
                               fontSize: 16.0,
@@ -74,7 +83,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.15,
+                          height: MediaQuery.of(context).size.height * 0.15,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +93,7 @@ class _ProfileState extends State<Profile> {
                               size: 18.0,
                             ),
                             Text(
-                              ' Credits : ${StoreProvider.of<AppState>(appStateContext).state.user?.credits.toString()}',
+                              ' Credits : ${state.user?.credits.toString()}',
                               style: const TextStyle(
                                 fontFamily: 'Google-Sans',
                                 fontSize: 18.0,
@@ -93,18 +102,23 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.05,
+                          height: MediaQuery.of(context).size.height * 0.05,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width*0.35,
+                              width: MediaQuery.of(context).size.width * 0.35,
                               margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0.0),
-                              child:OutlinedButton(
+                                horizontal: 10.0,
+                                vertical: 0.0,
+                              ),
+                              child: OutlinedButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, ProfileSettings.routeName);
+                                  Navigator.pushNamed(
+                                    context,
+                                    ProfileSettings.routeName,
+                                  );
                                 },
                                 style: OutlinedButton.styleFrom(
                                   minimumSize: const Size(double.infinity, 50),
@@ -126,19 +140,25 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.35,
+                              width: MediaQuery.of(context).size.width * 0.35,
                               margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0.0),
-                              child:ElevatedButton(
+                                horizontal: 10.0,
+                                vertical: 0.0,
+                              ),
+                              child: ElevatedButton(
                                 onPressed: () async {
-                                  final provider =
-                                  Provider.of<GoogleSignInProvider>(
-                                      context,
-                                      listen: false);
-                                  await provider.logout();
                                   DialogManager.showLoadingDialog(context);
-                                  Navigator.pushReplacementNamed(context, SignIn.routeName);
+                                  final provider =
+                                      Provider.of<GoogleSignInProvider>(
+                                    context,
+                                    listen: false,
+                                  );
+                                  await provider.logout();
                                   DialogManager.hideDialog(context);
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    SignIn.routeName,
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(double.infinity, 50),
@@ -158,7 +178,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*0.05,
+                          height: MediaQuery.of(context).size.height * 0.05,
                         ),
                       ],
                     ),
@@ -167,7 +187,6 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

@@ -58,7 +58,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/redux/actions.dart';
-import 'package:venu/screens/home/card.dart';
+import 'package:venu/screens/room/card.dart';
 import 'package:venu/screens/inside_room/inside_room.dart';
 import 'package:venu/services/dialog_manager.dart';
 import 'package:venu/services/network_helper.dart';

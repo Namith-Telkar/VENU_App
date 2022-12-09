@@ -302,7 +302,7 @@ class _CreateRoomCodeState extends State<CreateRoomCode> {
                             Map<String, dynamic> response = {};
                             response =
                                 await NetworkHelper.createRoom(userDetails);
-                            print(response);
+                            debugPrint(response.toString());
                             StoreProvider.of<AppState>(_appStateContext)
                                 .dispatch(
                               UpdateRooms(rooms: [], roomsUpdated: true),
