@@ -16,6 +16,16 @@ AppState reducers(AppState prevState, dynamic action) {
       rooms: action.rooms,
       roomsUpdated: action.roomsUpdated,
     );
+  } else if (action is UpdateUserSuggestions) {
+    newState = AppState.copyWith(
+      prev: prevState,
+      userSuggestions: action.userSuggestions,
+    );
+  } else if (action is UpdateVenueTypes) {
+    newState = AppState.copyWith(
+      prev: prevState,
+      venueTypes: action.venueTypes,
+    );
   } else {
     newState = AppState.copyWith(prev: prevState);
   }

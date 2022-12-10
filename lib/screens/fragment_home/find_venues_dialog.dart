@@ -3,73 +3,100 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:venu/screens/venues/venues.dart';
-import 'package:venu/services/dialog_manager.dart';
+import 'package:location/location.dart';
+import 'package:venu/redux/actions.dart';
 
 import '../../models/venuUser.dart';
-import '../../redux/actions.dart';
 import '../../redux/store.dart';
+import '../../services/dialog_manager.dart';
 import '../../services/network_helper.dart';
 
-class PreferencesDialog extends StatefulWidget {
-  final Map<String, dynamic> venueTypes;
-  final Function updateRoomDetails;
-  final String roomId;
-
-  const PreferencesDialog({
-    required this.venueTypes,
-    required this.roomId,
-    required this.updateRoomDetails,
-    Key? key,
-  }) : super(key: key);
+class FindVenuesDialog extends StatefulWidget {
+  const FindVenuesDialog({Key? key}) : super(key: key);
 
   @override
-  State<PreferencesDialog> createState() => _PreferencesDialogState();
+  State<FindVenuesDialog> createState() => _FindVenuesDialogState();
 }
 
-class _PreferencesDialogState extends State<PreferencesDialog> {
+class _FindVenuesDialogState extends State<FindVenuesDialog> {
   late BuildContext _appStateContext;
+  late AppState _appState;
 
-  late List<String> venueTypesList =
-      widget.venueTypes.entries.map((e) => e.key).toList();
-  late String preference = venueTypesList[0];
+  List<String> venueTypesList = [];
+  String? preference;
+
+  Location location = Location();
+  late bool serviceEnabled;
+  late PermissionStatus permissionGranted;
+  late LocationData locationData;
+
+  Future<LocationData> getLocation() async {
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+    }
+
+    if (!serviceEnabled || permissionGranted != PermissionStatus.granted) {
+      //show error
+    }
+    locationData = await location.getLocation();
+    return locationData;
+  }
 
   Future<void> getPredictions() async {
     DialogManager.showLoadingDialog(context);
+    await getLocation();
 
     String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
-    Map<String, dynamic> result = await NetworkHelper.getPredictions(
+    Map<String, dynamic> result = await NetworkHelper.getPredictionsNearMe(
       googleToken,
-      widget.roomId,
-      widget.venueTypes[preference],
+      locationData.latitude!,
+      locationData.longitude!,
+      _appState.venueTypes[preference],
     );
 
     if (result['success']) {
       VenuUser user = VenuUser.fromNetworkMap(result['user']);
+      if (!mounted) return;
       StoreProvider.of<AppState>(_appStateContext).dispatch(
         UpdateNewUser(newUser: user),
       );
-      widget.updateRoomDetails(result['room'], result['venues']);
+      StoreProvider.of<AppState>(_appStateContext).dispatch(
+        UpdateUserSuggestions(userSuggestions: result['venues']),
+      );
 
       DialogManager.hideDialog(_appStateContext); // hide loading dialog
       DialogManager.hideDialog(_appStateContext); // hide preferences dialog
-      Navigator.of(_appStateContext).push(
-        MaterialPageRoute(
-          builder: (context) => Venues(venues: result['venues']),
-        ),
-      );
     } else {
+      if (!mounted) return;
       DialogManager.hideDialog(_appStateContext);
       DialogManager.showErrorDialog(
         result['message'] ?? 'Error, Try again later!',
         _appStateContext,
         true,
         () {
-          Navigator.pop(_appStateContext);
-          DialogManager.hideDialog(_appStateContext);
+          Navigator.of(context).pop();
+          DialogManager.hideDialog(context);
         },
       );
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        venueTypesList =
+            _appState.venueTypes.entries.map((e) => e.key as String).toList();
+        preference = venueTypesList[0];
+      });
+    });
   }
 
   @override
@@ -78,6 +105,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
       converter: (store) => store.state,
       builder: (context, state) {
         _appStateContext = context;
+        _appState = state;
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
           child: AlertDialog(
@@ -116,7 +144,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
                         child: Text(value),
                       );
                     }).toList(),
-                    value: preference,
+                    value: preference ?? 'Loading...',
                     hint: const Text(
                       'Pick a preference',
                       style: TextStyle(

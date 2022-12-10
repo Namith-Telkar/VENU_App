@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkHelper {
@@ -33,6 +34,8 @@ class NetworkHelper {
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
+      result['venueTypes'] = responseObject['venueTypes'];
+      result['personalityTypes'] = responseObject['personalityTypes'];
       return result;
     }
     result['success'] = false;
@@ -280,20 +283,61 @@ class NetworkHelper {
     return result;
   }
 
+  static Future<Map<String, dynamic>> getPredictionsNearMe(
+    String googleToken,
+    double lat,
+    double lng,
+    String venueType,
+  ) async {
+    Map<String, dynamic> result = {
+      'success': false,
+      'error': 'Not implemented',
+    };
+
+    var url = Uri.parse('$endpoint/api/user/getPredictionsNearMe');
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
+          'token': googleToken,
+          'lat': lat,
+          'lng': lng,
+          'venueType': venueType,
+        },
+      ),
+    );
+    Map<String, dynamic> responseObject = json.decode(response.body);
+
+    debugPrint('error error');
+    debugPrint(responseObject.toString());
+
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['venues'] = responseObject['result'];
+      result['user'] = responseObject['user'];
+      return result;
+    }
+
+    return result;
+  }
+
   static Future<Map<String, dynamic>> updateRoomUserLocation(
     Map<String, dynamic> userDetails,
   ) async {
     var url = Uri.parse('$endpoint/api/user/updateRoomUserLocation');
-    var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
           'token': userDetails['googleToken'],
           'roomId': userDetails['roomId'],
-          'location': {
-            'lat': userDetails['latitude'],
-            'lng': userDetails['longitude'],
-          }
-        }));
+          'lat': userDetails['latitude'],
+          'lng': userDetails['longitude'],
+        },
+      ),
+    );
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {

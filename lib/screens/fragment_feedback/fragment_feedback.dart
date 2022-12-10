@@ -190,28 +190,51 @@ class _FragmentFeedbackState extends State<FragmentFeedback> {
                 const SizedBox(
                   height: 40.0,
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 0.0,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 40.0,
+                    vertical: 0.0,
                   ),
                   child: ElevatedButton(
                     onPressed: _sendFeedback,
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
+                      shape: const StadiumBorder(),
+                      minimumSize: const Size(double.infinity, 56),
                       backgroundColor: const Color(0xffA7D1D7),
                     ),
                     child: const Text(
                       'Submit',
                       style: TextStyle(
                         fontFamily: "Google-Sans",
-                        fontSize: 16.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
                       ),
                     ),
                   ),
                 ),
+                // Container(
+                //   margin: const EdgeInsets.symmetric(
+                //     vertical: 0.0,
+                //     horizontal: 40.0,
+                //   ),
+                //   child: ElevatedButton(
+                //     onPressed: _sendFeedback,
+                //     style: ElevatedButton.styleFrom(
+                //       minimumSize: const Size(double.infinity, 50),
+                //       backgroundColor: const Color(0xffA7D1D7),
+                //     ),
+                //     child: const Text(
+                //       'Submit',
+                //       style: TextStyle(
+                //         fontFamily: "Google-Sans",
+                //         fontSize: 16.0,
+                //         fontWeight: FontWeight.w500,
+                //         color: Colors.black,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );

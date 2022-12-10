@@ -20,3 +20,15 @@ class UpdateRooms extends Action {
 
   UpdateRooms({required this.rooms, required this.roomsUpdated});
 }
+
+class UpdateUserSuggestions extends Action {
+  List<dynamic> userSuggestions;
+
+  UpdateUserSuggestions({required this.userSuggestions});
+}
+
+class UpdateVenueTypes extends Action {
+  Map venueTypes;
+
+  UpdateVenueTypes({required this.venueTypes});
+}

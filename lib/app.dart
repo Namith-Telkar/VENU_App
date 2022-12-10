@@ -6,7 +6,6 @@ import 'package:venu/provider/google_sign_in.dart';
 import 'package:venu/redux/actions.dart';
 import 'package:venu/redux/reducers.dart';
 import 'package:venu/redux/store.dart';
-import 'package:venu/screens/home/home.dart';
 import 'package:venu/screens/inside_room/inside_room.dart';
 import 'package:venu/screens/intro_screen/intro_screen.dart';
 import 'package:venu/screens/landing/landing.dart';
@@ -66,7 +65,6 @@ class _AppState extends State<App> {
                   IntroScreen.routeName: (context) => IntroScreen(),
                   SignIn.routeName: (context) => const SignIn(),
                   Preferences.routeName: (context) => const Preferences(),
-                  Home.routeName: (context) => const Home(),
                   Landing.routeName: (context) => const Landing(),
                   ProfileSettings.routeName: (context) =>
                       const ProfileSettings(),

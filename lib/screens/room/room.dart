@@ -34,6 +34,8 @@ class _RoomState extends State<Room> {
   late BuildContext _appStateContext;
   late AppState _appState;
 
+  bool _roomsUpdaingFlag = false;
+
   void openCreateRoomDialog() {
     DialogManager.showCustomDialog(
       context,
@@ -99,7 +101,7 @@ class _RoomState extends State<Room> {
   }
 
   Widget getCurrentPage(BuildContext context) {
-    if (_appState.rooms!.isEmpty) {
+    if (_appState.rooms != null && _appState.rooms!.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -201,7 +203,7 @@ class _RoomState extends State<Room> {
               case ConnectionState.done:
                 return SafeArea(
                   child: Center(
-                    child: _appState.rooms!.isEmpty
+                    child: _appState.rooms == null || _appState.rooms!.isEmpty
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -311,7 +313,8 @@ class _RoomState extends State<Room> {
                                                 ) ??
                                                 {};
                                         // debugPrint(res.toString());
-                                        if (res['leaveRoom']) {
+                                        if (res['leaveRoom'] != null &&
+                                            res['leaveRoom'] == true) {
                                           leaveRoom(
                                             _appState.rooms![index]['id'],
                                           );
@@ -376,9 +379,12 @@ class _RoomState extends State<Room> {
         builder: (context, state) {
           _appStateContext = context;
           _appState = state;
-          if (_appState.roomsUpdated == null ||
-              _appState.roomsUpdated == true) {
+          if ((_appState.roomsUpdated == null ||
+                  _appState.roomsUpdated == true) &&
+              !_roomsUpdaingFlag) {
+            debugPrint("rooms updated");
             roomList = setRoomList();
+            _roomsUpdaingFlag = true;
           }
           return getCurrentPage(_appStateContext);
         },

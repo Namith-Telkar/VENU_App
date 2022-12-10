@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:venu/screens/fragment_feedback/fragment_feedback.dart';
-import 'package:venu/screens/home/home.dart';
+import 'package:venu/screens/fragment_home/fragment_home.dart';
 import 'package:venu/screens/profile/profile.dart';
 import 'package:venu/screens/room/room.dart';
 
@@ -15,7 +15,6 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
-  Widget childWidget = const Home();
 
   FloatingActionButton? _floatingActionButton;
 
@@ -27,7 +26,7 @@ class _LandingState extends State<Landing> {
 
   void _onItemTapped(int index) {
     debugPrint('index: $index');
-    if (index != 1) {
+    if (index != 1 || index != 0) {
       setFloatingActionButton(null);
     }
 
@@ -39,7 +38,9 @@ class _LandingState extends State<Landing> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      const Home(),
+      FragmentHome(
+        setFloatingActionButton: setFloatingActionButton,
+      ),
       Room(
         setFloatingActionButton: setFloatingActionButton,
       ),

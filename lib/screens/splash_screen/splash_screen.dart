@@ -21,32 +21,37 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Future<void> getAndRedirect() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      String googleToken =
+          await FirebaseAuth.instance.currentUser!.getIdToken();
+      Map<String, dynamic> result = await NetworkHelper.getUser(googleToken);
+      StoreProvider.of<AppState>(context).dispatch(
+        UpdateVenueTypes(venueTypes: result['venueTypes']),
+      );
+      if (result['success']) {
+        VenuUser user = VenuUser.fromNetworkMap(result['user']);
+        StoreProvider.of<AppState>(context)
+            .dispatch(UpdateNewUser(newUser: user));
+        Navigator.pushReplacementNamed(context, Landing.routeName);
+      } else {
+        final provider =
+            Provider.of<GoogleSignInProvider>(context, listen: false);
+        await provider.logout();
+        Navigator.pushReplacementNamed(context, IntroScreen.routeName);
+      }
+    } else {
+      Navigator.pushReplacementNamed(context, IntroScreen.routeName);
+    }
+  }
+
   @override
   void initState() {
-    Future.delayed(
-      const Duration(seconds: 3),
-      () async {
-        if (FirebaseAuth.instance.currentUser != null) {
-          String googleToken =
-              await FirebaseAuth.instance.currentUser!.getIdToken();
-          Map<String, dynamic> result =
-              await NetworkHelper.getUser(googleToken);
-          if (result['success']) {
-            VenuUser user = VenuUser.fromNetworkMap(result['user']);
-            StoreProvider.of<AppState>(context)
-                .dispatch(UpdateNewUser(newUser: user));
-            Navigator.pushReplacementNamed(context, Landing.routeName);
-          } else {
-            final provider =
-                Provider.of<GoogleSignInProvider>(context, listen: false);
-            await provider.logout();
-            Navigator.pushReplacementNamed(context, IntroScreen.routeName);
-          }
-        } else {
-          Navigator.pushReplacementNamed(context, IntroScreen.routeName);
-        }
-      },
-    );
+    // Future.delayed(
+    //   const Duration(seconds: 1),
+    //   getAndRedirect,
+    // );
+    getAndRedirect();
   }
 
   @override
