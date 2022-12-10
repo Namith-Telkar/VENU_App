@@ -370,22 +370,18 @@ class _RoomState extends State<Room> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffE5E5E5),
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, state) {
-            _appStateContext = context;
-            _appState = state;
-            if (_appState.roomsUpdated == null ||
-                _appState.roomsUpdated == true) {
-              roomList = setRoomList();
-            }
-            return getCurrentPage(_appStateContext);
-          },
-        ),
+    return SafeArea(
+      child: StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          _appStateContext = context;
+          _appState = state;
+          if (_appState.roomsUpdated == null ||
+              _appState.roomsUpdated == true) {
+            roomList = setRoomList();
+          }
+          return getCurrentPage(_appStateContext);
+        },
       ),
     );
   }

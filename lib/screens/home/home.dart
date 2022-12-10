@@ -121,176 +121,168 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffE5E5E5),
-      resizeToAvoidBottomInset: false,
-      body: StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (context, state) {
-          _appStateContext = context;
-          _appState = state;
-          return RefreshIndicator(
-            edgeOffset: 180.0,
-            onRefresh: () async {
-              roomList = setRoomList();
-              roomList.then((value) {
-                setState(() {
-                  tempRoomList = value;
-                });
-                StoreProvider.of<AppState>(_appStateContext).dispatch(
-                  UpdateRooms(
-                    rooms: value,
-                    roomsUpdated: false,
-                  ),
-                );
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, state) {
+        _appStateContext = context;
+        _appState = state;
+        return RefreshIndicator(
+          edgeOffset: 180.0,
+          onRefresh: () async {
+            roomList = setRoomList();
+            roomList.then((value) {
+              setState(() {
+                tempRoomList = value;
               });
-            },
-            child: FutureBuilder(
-              future: roomList,
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Center(
-                      child: SpinKitThreeBounce(
-                        color: Colors.black54,
-                        size: 40.0,
-                      ),
-                    );
-                  case ConnectionState.done:
-                    return SafeArea(
-                      child: Center(
-                        child: tempRoomList.isEmpty
-                            ? Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  const SizedBox(
-                                    height: 20.0,
+              StoreProvider.of<AppState>(_appStateContext).dispatch(
+                UpdateRooms(
+                  rooms: value,
+                  roomsUpdated: false,
+                ),
+              );
+            });
+          },
+          child: FutureBuilder(
+            future: roomList,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const Center(
+                    child: SpinKitThreeBounce(
+                      color: Colors.black54,
+                      size: 40.0,
+                    ),
+                  );
+                case ConnectionState.done:
+                  return SafeArea(
+                    child: Center(
+                      child: tempRoomList.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                const SizedBox(
+                                  width: 75.0,
+                                  height: 25.0,
+                                  child: RiveAnimation.asset(
+                                    'assets/images/venu-logo.riv',
                                   ),
-                                  const SizedBox(
-                                    width: 75.0,
-                                    height: 25.0,
-                                    child: RiveAnimation.asset(
-                                      'assets/images/venu-logo.riv',
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 0.0,
+                                    horizontal: 40.0,
+                                  ),
+                                  child: const Text(
+                                    'You are not in any room',
+                                    style: TextStyle(
+                                      fontFamily: "Google-Sans",
+                                      fontSize: 16.0,
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 0.0,
-                                      horizontal: 40.0,
+                                ),
+                                const SizedBox(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  child: RiveAnimation.asset(
+                                    'assets/images/not_in_any_room.riv',
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 0.0,
+                                    horizontal: 40.0,
+                                  ),
+                                  child: const Text(
+                                    'Join a room now',
+                                    style: TextStyle(
+                                      fontFamily: "Google-Sans",
+                                      fontSize: 16.0,
                                     ),
-                                    child: const Text(
-                                      'You are not in any room',
-                                      style: TextStyle(
-                                        fontFamily: "Google-Sans",
-                                        fontSize: 16.0,
-                                      ),
-                                      textAlign: TextAlign.center,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                              ],
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const SizedBox(
+                                  height: 50.0,
+                                ),
+                                const SizedBox(
+                                  width: 75.0,
+                                  height: 25.0,
+                                  child: RiveAnimation.asset(
+                                    'assets/images/venu-logo.riv',
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 40.0,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 0.0,
+                                    horizontal: 40.0,
+                                  ),
+                                  child: const Text(
+                                    'Rooms you have joined',
+                                    style: TextStyle(
+                                      fontFamily: "Google-Sans",
+                                      fontSize: 16.0,
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  const SizedBox(
-                                    width: 300.0,
-                                    height: 200.0,
-                                    child: RiveAnimation.asset(
-                                      'assets/images/not_in_any_room.riv',
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 0.0,
-                                      horizontal: 40.0,
-                                    ),
-                                    child: const Text(
-                                      'Join a room now',
-                                      style: TextStyle(
-                                        fontFamily: "Google-Sans",
-                                        fontSize: 16.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  const SizedBox(
-                                    height: 50.0,
-                                  ),
-                                  const SizedBox(
-                                    width: 75.0,
-                                    height: 25.0,
-                                    child: RiveAnimation.asset(
-                                      'assets/images/venu-logo.riv',
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 40.0,
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 0.0,
-                                      horizontal: 40.0,
-                                    ),
-                                    child: const Text(
-                                      'Rooms you have joined',
-                                      style: TextStyle(
-                                        fontFamily: "Google-Sans",
-                                        fontSize: 16.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 40.0,
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: tempRoomList.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InsideRoom(
-                                                  roomId: tempRoomList[index]
-                                                      ['id'],
-                                                ),
+                                ),
+                                const SizedBox(
+                                  height: 40.0,
+                                ),
+                                Expanded(
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: tempRoomList.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => InsideRoom(
+                                                roomId: tempRoomList[index]
+                                                    ['id'],
                                               ),
-                                            );
-                                          },
-                                          child: RoomCard(
-                                            roomName: tempRoomList[index]
-                                                ['name'],
-                                            roomCode: tempRoomList[index]['id'],
-                                            noOfPpl: tempRoomList[index]
-                                                ['userCount'],
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                            ),
+                                          );
+                                        },
+                                        child: RoomCard(
+                                          roomName: tempRoomList[index]['name'],
+                                          roomCode: tempRoomList[index]['id'],
+                                          noOfPpl: tempRoomList[index]
+                                              ['userCount'],
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ],
-                              ),
-                      ),
-                    );
-                  default:
-                    return const SizedBox();
-                }
-              },
-            ),
-          );
-        },
-      ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  );
+                default:
+                  return const SizedBox();
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

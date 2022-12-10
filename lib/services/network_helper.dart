@@ -40,7 +40,8 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> addUser(
-      Map<String, dynamic> userDetails) async {
+    Map<String, dynamic> userDetails,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/addDetails');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -64,7 +65,8 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> addUserP(
-      Map<String, dynamic> userDetails) async {
+    Map<String, dynamic> userDetails,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/addDetails');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -110,7 +112,8 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> joinRoom(
-      Map<String, dynamic> userDetails) async {
+    Map<String, dynamic> userDetails,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/joinRoom');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -135,7 +138,8 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> createRoom(
-      Map<String, dynamic> userDetails) async {
+    Map<String, dynamic> userDetails,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/createRoom');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -159,7 +163,9 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> getRoomDetails(
-      String googleToken, String roomId) async {
+    String googleToken,
+    String roomId,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/getRoom');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -181,7 +187,9 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> getUsersInRoom(
-      String googleToken, String roomId) async {
+    String googleToken,
+    String roomId,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/getUsersInRoom');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -201,7 +209,9 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> leaveRoom(
-      String googleToken, String roomId) async {
+    String googleToken,
+    String roomId,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/leaveRoom');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -221,7 +231,9 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> getSuggestions(
-      String googleToken, Map<String, dynamic> suggestionIds) async {
+    String googleToken,
+    Map<String, dynamic> suggestionIds,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/getSuggestions');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -241,7 +253,10 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> getPredictions(
-      String googleToken, String roomId, String venueType) async {
+    String googleToken,
+    String roomId,
+    String venueType,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/getPredictions');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -266,7 +281,8 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> updateRoomUserLocation(
-      Map<String, dynamic> userDetails) async {
+    Map<String, dynamic> userDetails,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/updateRoomUserLocation');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -289,7 +305,9 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> updateTwitterHandle(
-      String googleToken, String twitterId) async {
+    String googleToken,
+    String twitterId,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/updatePersonality');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -306,7 +324,9 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>> updatePersonality(
-      String googleToken, String personality) async {
+    String googleToken,
+    String personality,
+  ) async {
     var url = Uri.parse('$endpoint/api/user/updatePersonality');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -319,6 +339,35 @@ class NetworkHelper {
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
+      return result;
+    }
+    result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> sendFeedback(
+    String googleToken,
+    String subject,
+    String message,
+  ) async {
+    var url = Uri.parse('$endpoint/api/feedback/submit');
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
+          'token': googleToken,
+          'subject': subject,
+          'message': message,
+        },
+      ),
+    );
+    Map<String, dynamic> responseObject = json.decode(response.body);
+    Map<String, dynamic> result = {};
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['formLink'] = responseObject['formLink'];
+      result['message'] = responseObject['message'];
       return result;
     }
     result['success'] = false;

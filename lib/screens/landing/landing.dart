@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:venu/screens/fragment_feedback/fragment_feedback.dart';
 import 'package:venu/screens/home/home.dart';
 import 'package:venu/screens/profile/profile.dart';
 import 'package:venu/screens/room/room.dart';
@@ -25,6 +26,7 @@ class _LandingState extends State<Landing> {
   }
 
   void _onItemTapped(int index) {
+    debugPrint('index: $index');
     if (index != 1) {
       setFloatingActionButton(null);
     }
@@ -32,27 +34,23 @@ class _LandingState extends State<Landing> {
     setState(() {
       _selectedIndex = index;
     });
-    if (_selectedIndex == 0) {
-      setState(() {
-        childWidget = const Home();
-      });
-    } else if (_selectedIndex == 1) {
-      setState(() {
-        childWidget = Room(
-          setFloatingActionButton: setFloatingActionButton,
-        );
-      });
-    } else {
-      setState(() {
-        childWidget = const Profile();
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgetOptions = <Widget>[
+      const Home(),
+      Room(
+        setFloatingActionButton: setFloatingActionButton,
+      ),
+      const Profile(),
+      const FragmentFeedback(),
+    ];
+
     return Scaffold(
-      body: childWidget,
+      backgroundColor: const Color(0xffE5E5E5),
+      resizeToAvoidBottomInset: false,
+      body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 10.0,
         type: BottomNavigationBarType.shifting,
@@ -72,6 +70,12 @@ class _LandingState extends State<Landing> {
           BottomNavigationBarItem(
             icon: FaIcon(
               FontAwesomeIcons.solidUser,
+            ),
+            label: '\u2022',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(
+              FontAwesomeIcons.lightbulb,
             ),
             label: '\u2022',
           )
