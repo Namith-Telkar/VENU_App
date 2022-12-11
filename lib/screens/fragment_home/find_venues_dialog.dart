@@ -57,7 +57,7 @@ class _FindVenuesDialogState extends State<FindVenuesDialog> {
       googleToken,
       locationData.latitude!,
       locationData.longitude!,
-      _appState.venueTypes[preference],
+      _appState.appConfigs!.venueTypes[preference],
     );
 
     if (result['success']) {
@@ -92,8 +92,9 @@ class _FindVenuesDialogState extends State<FindVenuesDialog> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        venueTypesList =
-            _appState.venueTypes.entries.map((e) => e.key as String).toList();
+        venueTypesList = _appState.appConfigs!.venueTypes.entries
+            .map((e) => e.key as String)
+            .toList();
         preference = venueTypesList[0];
       });
     });

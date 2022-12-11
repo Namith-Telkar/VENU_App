@@ -12,12 +12,10 @@ import '../../redux/store.dart';
 import '../../services/network_helper.dart';
 
 class PreferencesDialog extends StatefulWidget {
-  final Map<String, dynamic> venueTypes;
   final Function updateRoomDetails;
   final String roomId;
 
   const PreferencesDialog({
-    required this.venueTypes,
     required this.roomId,
     required this.updateRoomDetails,
     Key? key,
@@ -29,10 +27,10 @@ class PreferencesDialog extends StatefulWidget {
 
 class _PreferencesDialogState extends State<PreferencesDialog> {
   late BuildContext _appStateContext;
+  late AppState _appState;
 
-  late List<String> venueTypesList =
-      widget.venueTypes.entries.map((e) => e.key).toList();
-  late String preference = venueTypesList[0];
+  List<String> venueTypesList = [];
+  String? preference;
 
   Future<void> getPredictions() async {
     DialogManager.showLoadingDialog(context);
@@ -41,7 +39,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
     Map<String, dynamic> result = await NetworkHelper.getPredictions(
       googleToken,
       widget.roomId,
-      widget.venueTypes[preference],
+      _appState.appConfigs!.venueTypes[preference],
     );
 
     if (result['success']) {
@@ -73,11 +71,25 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        venueTypesList = _appState.appConfigs!.venueTypes.entries
+            .map((e) => e.key as String)
+            .toList();
+        preference = venueTypesList[0];
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
         _appStateContext = context;
+        _appState = state;
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
           child: AlertDialog(
@@ -116,7 +128,7 @@ class _PreferencesDialogState extends State<PreferencesDialog> {
                         child: Text(value),
                       );
                     }).toList(),
-                    value: preference,
+                    value: preference ?? 'Loading...',
                     hint: const Text(
                       'Pick a preference',
                       style: TextStyle(

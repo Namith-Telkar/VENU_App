@@ -21,10 +21,12 @@ AppState reducers(AppState prevState, dynamic action) {
       prev: prevState,
       userSuggestions: action.userSuggestions,
     );
-  } else if (action is UpdateVenueTypes) {
+  } else if (action is SignOutUser) {
+    newState = AppState.newUserAppState(prev: prevState);
+  } else if (action is UpdateAppConfigs) {
     newState = AppState.copyWith(
       prev: prevState,
-      venueTypes: action.venueTypes,
+      appConfigs: action.appConfigs,
     );
   } else {
     newState = AppState.copyWith(prev: prevState);

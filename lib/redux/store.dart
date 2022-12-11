@@ -1,3 +1,4 @@
+import '../models/AppConfigs.dart';
 import '../models/venuUser.dart';
 
 class AppState {
@@ -6,7 +7,7 @@ class AppState {
   List<dynamic>? rooms;
   List<dynamic>? userSuggestions;
   bool? roomsUpdated;
-  Map venueTypes = {};
+  AppConfigs? appConfigs;
 
   AppState({this.user});
 
@@ -17,14 +18,25 @@ class AppState {
     List<dynamic>? rooms,
     bool? roomsUpdated,
     List<dynamic>? userSuggestions,
-    Map? venueTypes,
+    AppConfigs? appConfigs,
   }) {
     this.user = user ?? prev.user;
     this.darkTheme = darkTheme ?? prev.darkTheme;
     this.rooms = rooms ?? prev.rooms;
     this.roomsUpdated = roomsUpdated ?? prev.roomsUpdated;
     this.userSuggestions = userSuggestions ?? prev.userSuggestions;
-    this.venueTypes = venueTypes ?? prev.venueTypes;
+    this.appConfigs = appConfigs ?? prev.appConfigs;
+  }
+
+  AppState.newUserAppState({
+    required AppState prev,
+  }) {
+    darkTheme = prev.darkTheme;
+    user = null;
+    rooms = null;
+    userSuggestions = null;
+    roomsUpdated = true;
+    appConfigs = prev.appConfigs;
   }
 
   AppState.initial() {
@@ -32,6 +44,6 @@ class AppState {
     rooms = null;
     roomsUpdated = true;
     userSuggestions = null;
-    venueTypes = {};
+    appConfigs = null;
   }
 }

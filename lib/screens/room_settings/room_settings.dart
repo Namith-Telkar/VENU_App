@@ -53,6 +53,37 @@ class _RoomSettingsState extends State<RoomSettings> {
     return locationData;
   }
 
+  Future<void> updateLocationInRoom() async {
+    DialogManager.showLoadingDialog(context);
+    Map<String, dynamic> userDetails = {};
+    userDetails['googleToken'] =
+        await FirebaseAuth.instance.currentUser!.getIdToken();
+    userDetails['roomId'] = widget.roomId;
+    if (switchValue) {
+      await getLocation();
+      userDetails['latitude'] = locationData.latitude;
+      userDetails['longitude'] = locationData.longitude;
+    } else {
+      userDetails['latitude'] = num.tryParse(lat)?.toDouble();
+      userDetails['longitude'] = num.tryParse(lng)?.toDouble();
+    }
+    Map<String, dynamic> response = await NetworkHelper.updateRoomUserLocation(
+      userDetails,
+    );
+    if (response['success']) {
+      DialogManager.hideDialog(context);
+      DialogManager.showErrorDialog(
+        'Location Updated Successfully',
+        context,
+        false,
+        () {
+          DialogManager.hideDialog(context);
+          Navigator.of(context).pop();
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,32 +270,7 @@ class _RoomSettingsState extends State<RoomSettings> {
                   margin: const EdgeInsets.symmetric(
                       horizontal: 70.0, vertical: 00.0),
                   child: ElevatedButton(
-                    onPressed: () async {
-                      Map<String, dynamic> userDetails = {};
-                      userDetails['googleToken'] =
-                          await FirebaseAuth.instance.currentUser!.getIdToken();
-                      userDetails['roomId'] = widget.roomId;
-                      if (switchValue) {
-                        await getLocation();
-                        userDetails['latitude'] = locationData.latitude;
-                        userDetails['longitude'] = locationData.longitude;
-                      } else {
-                        userDetails['latitude'] = num.tryParse(lat)?.toDouble();
-                        userDetails['longitude'] =
-                            num.tryParse(lng)?.toDouble();
-                      }
-                      Map<String, dynamic> response = {};
-                      response = await NetworkHelper.updateRoomUserLocation(
-                          userDetails);
-                      if (response['success']) {
-                        DialogManager.showErrorDialog(
-                            'Location Updated Successfully', context, false,
-                            () {
-                          DialogManager.hideDialog(context);
-                          Navigator.of(context).pop();
-                        });
-                      }
-                    },
+                    onPressed: updateLocationInRoom,
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                       primary: const Color(0xffA7D1D7),

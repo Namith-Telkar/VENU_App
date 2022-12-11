@@ -30,7 +30,6 @@ class _InsideRoomState extends State<InsideRoom> {
   List users = [];
   List venues = [];
 
-  Map<String, dynamic> venueTypes = {};
   double lng = 0.0;
   double lat = 0.0;
 
@@ -93,7 +92,6 @@ class _InsideRoomState extends State<InsideRoom> {
         groupPer = value['result']['personality'];
         groupPerDesc = value['result']['personalityDescription'];
         suggestionIds = value['result']['suggestions'];
-        venueTypes = value['venueTypes'];
         lat = value['result']['location']['lat'];
         lng = value['result']['location']['lng'];
       });
@@ -550,7 +548,6 @@ class _InsideRoomState extends State<InsideRoom> {
                               DialogManager.showCustomDialog(
                                 context,
                                 PreferencesDialog(
-                                  venueTypes: venueTypes,
                                   roomId: widget.roomId,
                                   updateRoomDetails: updateRoomDetails,
                                 ),
@@ -559,8 +556,8 @@ class _InsideRoomState extends State<InsideRoom> {
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const StadiumBorder(),
+                              backgroundColor: const Color(0xffA7D1D7),
                               minimumSize: const Size(double.infinity, 56),
-                              primary: const Color(0xffA7D1D7),
                             ),
                             child: const Text(
                               'Find Venues',

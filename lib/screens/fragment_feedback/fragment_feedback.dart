@@ -17,6 +17,7 @@ class FragmentFeedback extends StatefulWidget {
 
 class _FragmentFeedbackState extends State<FragmentFeedback> {
   late BuildContext _appStateContext;
+  late AppState _appState;
   final _formKey = GlobalKey<FormState>();
   final _subjectController = TextEditingController();
   final _messageController = TextEditingController();
@@ -40,7 +41,7 @@ class _FragmentFeedbackState extends State<FragmentFeedback> {
         context,
         ThankYouDialog(
           message: res['message'],
-          formLink: res['formLink'],
+          formLink: _appState.appConfigs!.feedbackFormUrl,
         ),
         true,
       );
@@ -72,6 +73,7 @@ class _FragmentFeedbackState extends State<FragmentFeedback> {
         converter: (store) => store.state,
         builder: (context, state) {
           _appStateContext = context;
+          _appState = state;
           return Container(
             width: double.infinity,
             child: Column(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:venu/models/AppConfigs.dart';
 
 class NetworkHelper {
   NetworkHelper();
@@ -415,6 +416,29 @@ class NetworkHelper {
       return result;
     }
     result['success'] = false;
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> getAppConfigs() async {
+    Map<String, dynamic> result = {
+      'success': false,
+      'message': 'Not implemented',
+    };
+
+    var url = Uri.parse('$endpoint/api/config/android');
+    var response = await http.get(url);
+    Map<String, dynamic> responseObject = json.decode(response.body);
+
+    if (responseObject['success']) {
+      result['success'] = true;
+      result['appConfigs'] = AppConfigs.fromNetworkMap(responseObject);
+      result['message'] = responseObject['message'];
+      return result;
+    } else {
+      result['success'] = false;
+      result['message'] = responseObject['message'] ?? 'Unknown error';
+    }
+
     return result;
   }
 }

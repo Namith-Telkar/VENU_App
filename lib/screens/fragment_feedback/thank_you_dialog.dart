@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ThankYouDialog extends StatefulWidget {
   final String message;
-  final String formLink;
+  final Uri formLink;
   const ThankYouDialog({
     Key? key,
     required this.message,
@@ -68,8 +68,7 @@ class _ThankYouDialogState extends State<ThankYouDialog> {
               child: ElevatedButton(
                 onPressed: () async {
                   // open link in browser
-                  Uri url = Uri.parse(widget.formLink);
-                  if (!await launchUrl(url)) {
+                  if (!await launchUrl(widget.formLink)) {
                     Navigator.pop(context);
                   }
                 },

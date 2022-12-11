@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:venu/redux/actions.dart';
 import 'package:venu/screens/profile/profile_settings.dart';
 import 'package:venu/screens/sign_in/sign_in.dart';
 import 'package:venu/services/dialog_manager.dart';
@@ -19,6 +20,23 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late BuildContext appStateContext;
+
+  Future<void> signOutUser() async {
+    DialogManager.showLoadingDialog(context);
+    final provider = Provider.of<GoogleSignInProvider>(
+      context,
+      listen: false,
+    );
+    await provider.logout();
+
+    if (!mounted) return;
+    StoreProvider.of<AppState>(appStateContext).dispatch(SignOutUser());
+    DialogManager.hideDialog(context);
+    Navigator.pushReplacementNamed(
+      context,
+      SignIn.routeName,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,20 +160,7 @@ class _ProfileState extends State<Profile> {
                             vertical: 0.0,
                           ),
                           child: ElevatedButton(
-                            onPressed: () async {
-                              DialogManager.showLoadingDialog(context);
-                              final provider =
-                                  Provider.of<GoogleSignInProvider>(
-                                context,
-                                listen: false,
-                              );
-                              await provider.logout();
-                              DialogManager.hideDialog(context);
-                              Navigator.pushReplacementNamed(
-                                context,
-                                SignIn.routeName,
-                              );
-                            },
+                            onPressed: signOutUser,
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
                               backgroundColor: const Color(0xffA7D1D7),

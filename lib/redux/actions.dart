@@ -1,3 +1,4 @@
+import '../models/AppConfigs.dart';
 import '../models/venuUser.dart';
 
 abstract class Action {}
@@ -27,8 +28,10 @@ class UpdateUserSuggestions extends Action {
   UpdateUserSuggestions({required this.userSuggestions});
 }
 
-class UpdateVenueTypes extends Action {
-  Map venueTypes;
+class SignOutUser extends Action {}
 
-  UpdateVenueTypes({required this.venueTypes});
+class UpdateAppConfigs extends Action {
+  AppConfigs appConfigs;
+
+  UpdateAppConfigs({required this.appConfigs});
 }
