@@ -23,13 +23,25 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
     });
   }
 
-  String calculatePersonality(){
-   String personalityType = '';
-   eSelected?personalityType='${personalityType}E':personalityType='${personalityType}I';
-   sSelected?personalityType='${personalityType}S':personalityType='${personalityType}N';
-   tSelected?personalityType='${personalityType}T':personalityType='${personalityType}F';
-   jSelected?personalityType='${personalityType}J':personalityType='${personalityType}P';
-   return personalityType;
+  String calculatePersonality() {
+    String personalityType = '';
+    eSelected
+        ? personalityType = '${personalityType}E'
+        : personalityType = '${personalityType}I';
+    sSelected
+        ? personalityType = '${personalityType}S'
+        : personalityType = '${personalityType}N';
+    tSelected
+        ? personalityType = '${personalityType}T'
+        : personalityType = '${personalityType}F';
+    jSelected
+        ? personalityType = '${personalityType}J'
+        : personalityType = '${personalityType}P';
+    return personalityType;
+  }
+
+  void onDoneClicked() {
+    Navigator.pop(context, calculatePersonality());
   }
 
   @override
@@ -474,9 +486,7 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 70.0, vertical: 0.0),
                       child: ElevatedButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
+                        onPressed: onDoneClicked,
                         style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
                           minimumSize: const Size(double.infinity, 56),

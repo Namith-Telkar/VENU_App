@@ -117,8 +117,8 @@ class _ProfileState extends State<Profile> {
                               );
                             },
                             style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
                               minimumSize: const Size(double.infinity, 50),
-                              primary: Colors.white,
                               side: const BorderSide(
                                 color: Color(0xffA7D1D7),
                                 width: 3.0,
@@ -158,7 +158,7 @@ class _ProfileState extends State<Profile> {
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
-                              primary: const Color(0xffA7D1D7),
+                              backgroundColor: const Color(0xffA7D1D7),
                             ),
                             child: const Text(
                               'Sign out',

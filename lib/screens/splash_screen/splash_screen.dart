@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Map<String, dynamic> result = await NetworkHelper.getUser(googleToken);
       if (!mounted) return;
       StoreProvider.of<AppState>(context).dispatch(
-        UpdateVenueTypes(venueTypes: result['venueTypes']),
+        UpdateVenueTypes(venueTypes: result['venueTypes'] ?? {}),
       );
       if (result['success']) {
         VenuUser user = VenuUser.fromNetworkMap(result['user']);
