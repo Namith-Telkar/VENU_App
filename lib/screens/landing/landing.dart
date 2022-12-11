@@ -16,9 +16,9 @@ class Landing extends StatefulWidget {
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
 
-  FloatingActionButton? _floatingActionButton;
+  Widget? _floatingActionButton;
 
-  void setFloatingActionButton(FloatingActionButton? floatingActionButton) {
+  void setFloatingActionButton(Widget? floatingActionButton) {
     setState(() {
       _floatingActionButton = floatingActionButton;
     });
@@ -26,6 +26,11 @@ class _LandingState extends State<Landing> {
 
   void _onItemTapped(int index) {
     debugPrint('index: $index');
+
+    if (_selectedIndex == index) {
+      return;
+    }
+
     if (index != 1 || index != 0) {
       setFloatingActionButton(null);
     }
@@ -64,7 +69,7 @@ class _LandingState extends State<Landing> {
           ),
           BottomNavigationBarItem(
             icon: FaIcon(
-              FontAwesomeIcons.peopleGroup,
+              FontAwesomeIcons.userGroup,
             ),
             label: '\u2022',
           ),

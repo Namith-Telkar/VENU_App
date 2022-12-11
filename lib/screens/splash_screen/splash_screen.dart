@@ -26,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       String googleToken =
           await FirebaseAuth.instance.currentUser!.getIdToken();
       Map<String, dynamic> result = await NetworkHelper.getUser(googleToken);
+      if (!mounted) return;
       StoreProvider.of<AppState>(context).dispatch(
         UpdateVenueTypes(venueTypes: result['venueTypes']),
       );
@@ -38,9 +39,15 @@ class _SplashScreenState extends State<SplashScreen> {
         final provider =
             Provider.of<GoogleSignInProvider>(context, listen: false);
         await provider.logout();
+        if (!mounted) return;
         Navigator.pushReplacementNamed(context, IntroScreen.routeName);
       }
     } else {
+      Map<String, dynamic> result = await NetworkHelper.getUser('token');
+      if (!mounted) return;
+      // StoreProvider.of<AppState>(context).dispatch(
+      //   UpdateVenueTypes(venueTypes: result['venueTypes']),
+      // );
       Navigator.pushReplacementNamed(context, IntroScreen.routeName);
     }
   }
@@ -51,7 +58,9 @@ class _SplashScreenState extends State<SplashScreen> {
     //   const Duration(seconds: 1),
     //   getAndRedirect,
     // );
-    getAndRedirect();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getAndRedirect();
+    });
   }
 
   @override

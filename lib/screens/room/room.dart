@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rive/rive.dart';
@@ -44,6 +45,14 @@ class _RoomState extends State<Room> {
     );
   }
 
+  void openEnterRoomDialog() {
+    DialogManager.showCustomDialog(
+      context,
+      EnterRoomCode(),
+      true,
+    );
+  }
+
   Future<List> setRoomList() async {
     Map<String, dynamic> response = {};
     String googleToken = await FirebaseAuth.instance.currentUser!.getIdToken();
@@ -56,6 +65,12 @@ class _RoomState extends State<Room> {
           roomsUpdated: false,
         ),
       );
+
+      if (response['rooms'] != null && response['rooms'].isEmpty) {
+        widget.setFloatingActionButton(null);
+      } else {
+        widget.setFloatingActionButton(getFloatingActionButton());
+      }
       return temp;
     }
     return [];
@@ -88,16 +103,60 @@ class _RoomState extends State<Room> {
     }
   }
 
-  FloatingActionButton getFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () {
-        openCreateRoomDialog();
-      },
-      backgroundColor: const Color(0xffA7D1D7),
-      child: const FaIcon(
-        FontAwesomeIcons.plus,
-      ),
+  Widget getFloatingActionButton() {
+    return SpeedDial(
+      icon: Icons.add, //icon on Floating action button
+      activeIcon: Icons.close, //icon when menu is expanded on button
+      backgroundColor: const Color(0xffA7D1D7), //background color of button
+      foregroundColor: Colors.white, //font color, icon color in button
+      activeBackgroundColor:
+          const Color(0xffA7D1D7), //background color when menu is expanded
+      activeForegroundColor: Colors.white,
+      visible: true,
+      closeManually: false,
+      curve: Curves.bounceIn,
+      overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      elevation: 8.0, //shadow elevation of button
+      shape: const CircleBorder(),
+      childrenButtonSize: const Size(70.0, 70.0),
+      spacing: 10.0,
+      children: [
+        SpeedDialChild(
+          //speed dial child
+          child: const Icon(Icons.group_add_rounded),
+          backgroundColor: const Color(0xffA7D1D7),
+          foregroundColor: Colors.white,
+          label: 'Join Room',
+          labelStyle: const TextStyle(
+            fontFamily: "Google-Sans",
+            fontSize: 16.0,
+          ),
+          onTap: () => openEnterRoomDialog(),
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.add),
+          backgroundColor: const Color(0xffA7D1D7),
+          foregroundColor: Colors.white,
+          label: 'Create Room',
+          labelStyle: const TextStyle(
+            fontFamily: "Google-Sans",
+            fontSize: 16.0,
+          ),
+          onTap: () => openCreateRoomDialog(),
+        ),
+      ],
     );
+
+    // return FloatingActionButton(
+    //   onPressed: () {
+    //     openCreateRoomDialog();
+    //   },
+    //   backgroundColor: const Color(0xffA7D1D7),
+    //   child: const FaIcon(
+    //     FontAwesomeIcons.plus,
+    //   ),
+    // );
   }
 
   Widget getCurrentPage(BuildContext context) {
@@ -126,11 +185,7 @@ class _RoomState extends State<Room> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  DialogManager.showCustomDialog(
-                    context,
-                    EnterRoomCode(),
-                    true,
-                  );
+                  openEnterRoomDialog();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
@@ -158,9 +213,9 @@ class _RoomState extends State<Room> {
                   openCreateRoomDialog();
                 },
                 style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
                   shape: const StadiumBorder(),
                   minimumSize: const Size(double.infinity, 56),
-                  primary: Colors.white,
                   side: const BorderSide(
                     color: Color(0xffA7D1D7),
                     width: 3.0,
@@ -296,6 +351,7 @@ class _RoomState extends State<Room> {
                                   physics: const BouncingScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: _appState.rooms!.length,
+                                  padding: const EdgeInsets.only(bottom: 80.0),
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return GestureDetector(
@@ -351,7 +407,11 @@ class _RoomState extends State<Room> {
     super.initState();
     roomList = Future<List<dynamic>>.value([]);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.setFloatingActionButton(getFloatingActionButton());
+      if (_appState.rooms != null && _appState.rooms!.isEmpty) {
+        widget.setFloatingActionButton(null);
+      } else {
+        widget.setFloatingActionButton(getFloatingActionButton());
+      }
       if (_appState.roomsUpdated == null || _appState.roomsUpdated == true) {
         roomList = setRoomList();
         roomList.then((value) {

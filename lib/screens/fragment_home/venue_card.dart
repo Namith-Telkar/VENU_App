@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:venu/screens/fragment_view_venue/fragment_view_venue.dart';
 
 class VenueCard extends StatefulWidget {
   final Map<String, dynamic> venue;
@@ -14,10 +15,28 @@ class VenueCard extends StatefulWidget {
 }
 
 class _VenueCardState extends State<VenueCard> {
+  void viewVenue() {
+    // build the venue page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: const Color(0xffE5E5E5),
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: FragmentViewVenue(
+              venue: widget.venue,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+    return GestureDetector(
+      onTap: viewVenue,
       child: Card(
         shadowColor: Colors.black54,
         surfaceTintColor: Colors.black54,
@@ -25,59 +44,110 @@ class _VenueCardState extends State<VenueCard> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        margin: const EdgeInsets.only(
+          left: 25.0,
+          right: 25.0,
+          top: 15.0,
+          bottom: 15.0,
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(
+                top: 20.0,
+                bottom: 20.0,
+                left: 15.0,
+              ),
+              child: CircleAvatar(
+                radius: 30.0,
+                backgroundImage: NetworkImage(widget.venue['pictures'][0]),
+              ),
+            ),
+            const SizedBox(width: 15.0),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.venue['name'] ?? "Venue Name",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                     style: const TextStyle(
                       fontFamily: "Google-Sans",
                       fontSize: 16.0,
                     ),
                   ),
-                  // Text(
-                  //   widget.roomCode,
-                  //   style: const TextStyle(
-                  //       fontFamily: "Google-Sans",
-                  //       fontSize: 14.0,
-                  //       color: Color(0xff8A8A8E)
-                  //   ),
-                  // ),
-                  const SizedBox(
-                    height: 25.0,
-                  ),
+                  const SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '${widget.venue['similarity'].toString() ?? 0}% Match!',
+                        'Rating:  ${widget.venue['rating'] ?? "0"}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: const TextStyle(
                           fontFamily: "Google-Sans",
                           fontSize: 14.0,
-                          color: Color(0xff26242B),
+                          height: 1.5,
                         ),
+                      ),
+                      const SizedBox(width: 2.0),
+                      const FaIcon(
+                        FontAwesomeIcons.star,
+                        color: Color(0xffEFD370),
+                        size: 12.0,
                       ),
                     ],
                   ),
                 ],
               ),
-              Column(
+            ),
+            const SizedBox(width: 10.0),
+            Container(
+              padding: const EdgeInsets.only(
+                top: 30.0,
+                bottom: 30.0,
+                right: 20.0,
+                left: 20.0,
+              ),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                ),
+                color: Color(0xffA7D1D7),
+              ),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  FaIcon(
-                    FontAwesomeIcons.angleRight,
-                    color: Colors.black,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${widget.venue['similarity'] ?? "0"}%',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Google-Sans",
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    'Match',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Google-Sans",
+                      fontSize: 14.0,
+                    ),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/redux/actions.dart';
@@ -52,15 +53,19 @@ class _FragmentHomeState extends State<FragmentHome> {
       backgroundColor: const Color(0xffA7D1D7),
       child: const FaIcon(
         FontAwesomeIcons.arrowsRotate,
+        size: 20.0,
       ),
     );
   }
 
   Widget getBody(BuildContext context) {
     if (_isLoading) {
-      return Expanded(
+      return const Expanded(
         child: Center(
-          child: CircularProgressIndicator(),
+          child: SpinKitThreeBounce(
+            color: Colors.black54,
+            size: 40.0,
+          ),
         ),
       );
     }
@@ -113,6 +118,7 @@ class _FragmentHomeState extends State<FragmentHome> {
           physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
           itemCount: _appState.userSuggestions!.length,
+          padding: const EdgeInsets.only(bottom: 80.0),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () async {
