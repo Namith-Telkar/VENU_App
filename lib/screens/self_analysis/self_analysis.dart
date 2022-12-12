@@ -4,8 +4,11 @@ import 'package:rive/rive.dart';
 import 'package:venu/screens/self_analysis/traits_card.dart';
 
 class SelfAnalysis extends StatefulWidget {
-  static const routeName = '/self_analysis';
-  const SelfAnalysis({Key? key}) : super(key: key);
+  final Function submitPersonality;
+  const SelfAnalysis({
+    Key? key,
+    required this.submitPersonality,
+  }) : super(key: key);
 
   @override
   State<SelfAnalysis> createState() => _SelfAnalysisState();
@@ -41,6 +44,10 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
   }
 
   void onDoneClicked() {
+    widget.submitPersonality(calculatePersonality());
+  }
+
+  void onBackClicked() {
     Navigator.pop(context, calculatePersonality());
   }
 
@@ -53,8 +60,9 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
           rawPages: [
             Container(
               margin: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.15,
-                  horizontal: 40.0),
+                vertical: MediaQuery.of(context).size.height * 0.15,
+                horizontal: 40.0,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -78,8 +86,9 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
             ),
             Container(
               margin: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.01,
-                  horizontal: 40.0),
+                vertical: MediaQuery.of(context).size.height * 0.01,
+                horizontal: 40.0,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -439,19 +448,17 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.2,
-                  horizontal: 40.0),
+              margin: const EdgeInsets.symmetric(
+                vertical: 20.0,
+                horizontal: 40.0,
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const SizedBox(
                     width: 75.0,
                     height: 25.0,
                     child: RiveAnimation.asset('assets/images/venu-logo.riv'),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
                   ),
                   const Text(
                     'Your personality from the self-analysis test is',
@@ -461,49 +468,85 @@ class _SelfAnalysisState extends State<SelfAnalysis> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  Image.asset(
-                    'assets/images/${calculatePersonality()}.png',
-                    height: MediaQuery.of(context).size.height * 0.15,
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  Text(
-                    calculatePersonality(),
-                    style: const TextStyle(
-                      fontFamily: 'Google-Sans',
-                      fontSize: 32.0,
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 70.0, vertical: 0.0),
-                      child: ElevatedButton(
-                        onPressed: onDoneClicked,
-                        style: ElevatedButton.styleFrom(
-                          shape: const StadiumBorder(),
-                          minimumSize: const Size(double.infinity, 56),
-                          primary: const Color(0xffA7D1D7),
+                  Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/${calculatePersonality()}.png',
+                        height: MediaQuery.of(context).size.height * 0.15,
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        calculatePersonality(),
+                        style: const TextStyle(
+                          fontFamily: 'Google-Sans',
+                          fontSize: 32.0,
                         ),
-                        child: const Text(
-                          'Go Back!',
-                          style: TextStyle(
-                            fontFamily: "Google-Sans",
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 70.0, vertical: 0.0),
+                          child: ElevatedButton(
+                            onPressed: onDoneClicked,
+                            style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
+                              backgroundColor: const Color(0xffA7D1D7),
+                              minimumSize: const Size(double.infinity, 56),
+                            ),
+                            child: const Text(
+                              'Continue',
+                              style: TextStyle(
+                                fontFamily: "Google-Sans",
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 70.0,
+                            vertical: 0,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: onBackClicked,
+                            style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(
+                                side: BorderSide(
+                                  color: Color(0xffA7D1D7),
+                                  width: 3.0,
+                                ),
+                              ),
+                              backgroundColor: Colors.white,
+                              minimumSize: const Size(double.infinity, 56),
+                            ),
+                            child: const Text(
+                              'Go Back',
+                              style: TextStyle(
+                                fontFamily: "Google-Sans",
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(),
                 ],
               ),
             ),

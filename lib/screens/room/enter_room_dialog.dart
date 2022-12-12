@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
 import 'package:venu/screens/room/code_field.dart';
@@ -57,6 +58,66 @@ class _EnterRoomCodeState extends State<EnterRoomCode> {
     roomId = value;
   }
 
+  Future<void> joinRoom() async {
+    if (roomId == '') {
+      DialogManager.showErrorDialog(
+        'Please enter a valid room code',
+        context,
+        true,
+        () {
+          Navigator.pop(context);
+        },
+      );
+      return;
+    }
+
+    DialogManager.showLoadingDialog(context);
+    userDetails['googleToken'] =
+        await FirebaseAuth.instance.currentUser!.getIdToken();
+    userDetails['roomId'] = roomId;
+    if (switchValue) {
+      await getLocation();
+      userDetails['latitude'] = locationData.latitude;
+      userDetails['longitude'] = locationData.longitude;
+    } else {
+      userDetails['latitude'] = num.tryParse(lat)?.toDouble();
+      userDetails['longitude'] = num.tryParse(lng)?.toDouble();
+    }
+    Map<String, dynamic> response = await NetworkHelper.joinRoom(userDetails);
+    debugPrint(response.toString());
+    if (response['success']) {
+      StoreProvider.of<AppState>(context).dispatch(
+        UpdateRooms(
+          rooms: response['roomList'],
+          roomsUpdated: false,
+        ),
+      );
+      DialogManager.hideDialog(context);
+      DialogManager.hideDialog(context);
+    } else {
+      DialogManager.hideDialog(context);
+      DialogManager.showErrorDialog(
+        'Error occured!',
+        context,
+        true,
+        () {
+          Navigator.pop(context);
+        },
+      );
+    }
+
+    // DialogManager.hideDialog(context);
+  }
+
+  Future<void> pasteCode() async {
+    ClipboardData? value = await Clipboard.getData('text/plain');
+    if (value != null && value.text != null) {
+      setState(() {
+        roomId = value.text!;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
@@ -79,7 +140,7 @@ class _EnterRoomCodeState extends State<EnterRoomCode> {
                   margin: const EdgeInsets.symmetric(
                       vertical: 5.0, horizontal: 20.0),
                   child: const Text(
-                    'The six digit code your friend shared. It should look like #123456',
+                    'The room code to join the room.',
                     style: TextStyle(
                       fontFamily: "Google-Sans",
                       fontSize: 12.0,
@@ -109,40 +170,62 @@ class _EnterRoomCodeState extends State<EnterRoomCode> {
                           vertical: 20.0,
                           horizontal: 15.0,
                         ),
-                        child: TextField(
-                          onChanged: (val) {
-                            setState(() {
-                              roomId = val;
-                            });
-                          },
-                          style: const TextStyle(
-                            fontFamily: 'Google-Sans',
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                          decoration: const InputDecoration(
-                            hintText: '#Room code',
-                            hintStyle: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontSize: 16.0,
-                              color: Colors.black45,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black54,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 150.0,
+                              child: TextField(
+                                controller: TextEditingController(text: roomId),
+                                onChanged: (val) {
+                                  setState(() {
+                                    roomId = val;
+                                  });
+                                },
+                                style: const TextStyle(
+                                  fontFamily: 'Google-Sans',
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                                decoration: const InputDecoration(
+                                  hintText: '#Room code',
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Raleway',
+                                    fontSize: 16.0,
+                                    color: Colors.black45,
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black54,
+                            GestureDetector(
+                              onTap: pasteCode,
+                              child: const Text(
+                                'Paste',
+                                style: TextStyle(
+                                  fontFamily: "Google-Sans",
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 40.0),
+                          vertical: 10.0,
+                          horizontal: 40.0,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -172,12 +255,12 @@ class _EnterRoomCodeState extends State<EnterRoomCode> {
                         ),
                       ),
                       switchValue
-                          ? const SizedBox(
-                              width: 0.0,
-                            )
+                          ? const SizedBox()
                           : Container(
                               margin: const EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 0.0),
+                                vertical: 20.0,
+                                horizontal: 0.0,
+                              ),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -283,53 +366,11 @@ class _EnterRoomCodeState extends State<EnterRoomCode> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15.0, vertical: 10.0),
                         child: ElevatedButton(
-                          onPressed: () async {
-                            DialogManager.showLoadingDialog(context);
-                            userDetails['googleToken'] = await FirebaseAuth
-                                .instance.currentUser!
-                                .getIdToken();
-                            userDetails['roomId'] = roomId;
-                            if (switchValue) {
-                              await getLocation();
-                              userDetails['latitude'] = locationData.latitude;
-                              userDetails['longitude'] = locationData.longitude;
-                            } else {
-                              userDetails['latitude'] =
-                                  num.tryParse(lat)?.toDouble();
-                              userDetails['longitude'] =
-                                  num.tryParse(lng)?.toDouble();
-                            }
-                            Map<String, dynamic> response =
-                                await NetworkHelper.joinRoom(userDetails);
-                            debugPrint(response.toString());
-                            if (response['success']) {
-                              StoreProvider.of<AppState>(context).dispatch(
-                                UpdateRooms(
-                                  rooms: response['roomList'],
-                                  roomsUpdated: false,
-                                ),
-                              );
-                              DialogManager.hideDialog(context);
-                              DialogManager.hideDialog(context);
-                            } else {
-                              DialogManager.hideDialog(context);
-                              DialogManager.hideDialog(context);
-                              DialogManager.showErrorDialog(
-                                'Error occured!',
-                                context,
-                                true,
-                                () {
-                                  Navigator.pop(context);
-                                },
-                              );
-                            }
-
-                            // DialogManager.hideDialog(context);
-                          },
+                          onPressed: joinRoom,
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
+                            backgroundColor: const Color(0xffA7D1D7),
                             minimumSize: const Size(double.infinity, 56),
-                            primary: const Color(0xffA7D1D7),
                           ),
                           child: const Text(
                             'Join room',

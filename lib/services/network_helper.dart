@@ -68,28 +68,38 @@ class NetworkHelper {
     return result;
   }
 
-  static Future<Map<String, dynamic>> addUserP(
-    Map<String, dynamic> userDetails,
-  ) async {
+  static Future<Map<String, dynamic>> addUserP({
+    required String token,
+    required String personality,
+    required double latitude,
+    required double longitude,
+  }) async {
     var url = Uri.parse('$endpoint/api/user/addDetails');
-    var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'token': userDetails['googleToken'],
-          'personality': userDetails['twitterHandle'],
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
+          'token': token,
+          'personality': personality,
           'location': {
-            'lat': userDetails['latitude'],
-            'lng': userDetails['longitude'],
+            'lat': latitude,
+            'lng': longitude,
           }
-        }));
+        },
+      ),
+    );
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
       result['userDetails'] = responseObject['user'];
       return result;
+    } else {
+      result['success'] = false;
+      result['message'] = responseObject['message'] ?? 'Personality error';
+      return result;
     }
-    result['success'] = false;
     return result;
   }
 

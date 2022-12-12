@@ -25,8 +25,6 @@ class _ManualPreferencesState extends State<ManualPreferences> {
   late BuildContext appStateContext;
   String personality = 'INTJ';
 
-  Map<String, dynamic> userDetails = {};
-
   Location location = Location();
 
   late bool serviceEnabled;
@@ -54,12 +52,56 @@ class _ManualPreferencesState extends State<ManualPreferences> {
   Future<void> openOfficialTest() async {
     await launchUrl(
       Uri.parse('https://www.16personalities.com/free-personality-test'),
+      mode: LaunchMode.externalApplication,
     );
   }
 
+  Future<void> submitPersonality(String perlity) async {
+    DialogManager.showLoadingDialog(context);
+    await getLocation();
+    Map<String, dynamic> response = await NetworkHelper.addUserP(
+      token: await FirebaseAuth.instance.currentUser!.getIdToken(),
+      personality: perlity,
+      latitude: locationData.latitude!,
+      longitude: locationData.longitude!,
+    );
+
+    if (response['success']) {
+      VenuUser user = VenuUser.fromNetworkMap(response['userDetails']);
+      StoreProvider.of<AppState>(context).dispatch(
+        UpdateNewUser(
+          newUser: user,
+        ),
+      );
+      DialogManager.hideDialog(context);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        Landing.routeName,
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      DialogManager.hideDialog(context);
+      DialogManager.showErrorDialog(
+        response['message'],
+        context,
+        true,
+        () {
+          DialogManager.hideDialog(context);
+        },
+      );
+    }
+  }
+
   Future<void> openSelfAnalysis() async {
-    String? selected =
-        await Navigator.pushNamed(context, SelfAnalysis.routeName) as String?;
+    String? selected = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SelfAnalysis(
+          submitPersonality: submitPersonality,
+        ),
+      ),
+    ) as String?;
+
     if (selected != null) {
       setState(() {
         personality = selected;
@@ -379,8 +421,9 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                       ),
                       onChanged: (newValue) {
                         setState(() {
-                          personality = newValue!;
-                          userDetails['twitterHandle'] = personality;
+                          if (newValue != null) {
+                            personality = newValue;
+                          }
                         });
                       },
                       style: const TextStyle(
@@ -391,8 +434,10 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xffA7D1D7), width: 3.0),
+                          borderSide: BorderSide(
+                            color: Color(0xffA7D1D7),
+                            width: 3.0,
+                          ),
                         ),
                       ),
                     ),
@@ -403,37 +448,13 @@ class _ManualPreferencesState extends State<ManualPreferences> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 70.0, vertical: 0.0),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        DialogManager.showLoadingDialog(context);
-                        await getLocation();
-                        userDetails['latitude'] = locationData.latitude;
-                        userDetails['longitude'] = locationData.longitude;
-                        userDetails['googleToken'] = await FirebaseAuth
-                            .instance.currentUser!
-                            .getIdToken();
-                        Map<String, dynamic> response =
-                            await NetworkHelper.addUserP(userDetails);
-                        if (response['success']) {
-                          VenuUser user =
-                              VenuUser.fromNetworkMap(response['userDetails']);
-                          StoreProvider.of<AppState>(context)
-                              .dispatch(UpdateNewUser(newUser: user));
-                          DialogManager.hideDialog(context);
-                          Navigator.pushReplacementNamed(
-                              context, Landing.routeName);
-                        } else {
-                          DialogManager.hideDialog(context);
-                          DialogManager.showErrorDialog(
-                              'Error setting twitter handle', context, true,
-                              () {
-                            DialogManager.hideDialog(context);
-                          });
-                        }
+                      onPressed: () {
+                        submitPersonality(personality);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const StadiumBorder(),
+                        backgroundColor: const Color(0xffA7D1D7),
                         minimumSize: const Size(double.infinity, 56),
-                        primary: const Color(0xffA7D1D7),
                       ),
                       child: const Text(
                         'Submit',

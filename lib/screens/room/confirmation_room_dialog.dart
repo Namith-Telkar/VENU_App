@@ -64,11 +64,16 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(
-                    horizontal: 15.0, vertical: 10.0),
+                  horizontal: 15.0,
+                  vertical: 10.0,
+                ),
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: const Color(0xffA7D1D7), width: 1.5)),
+                  border: Border.all(
+                    color: const Color(0xffA7D1D7),
+                    width: 1.5,
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -88,14 +93,18 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
                     GestureDetector(
                       onTap: () {
                         Clipboard.setData(ClipboardData(text: widget.roomId))
-                            .then((_) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                                  content: Text(
-                            'Copied to your clipboard !',
-                            style: TextStyle(fontFamily: 'Google-Sans'),
-                          )));
-                        });
+                            .then(
+                          (_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Copied to your clipboard !',
+                                  style: TextStyle(fontFamily: 'Google-Sans'),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: Row(
                         children: const [
@@ -139,8 +148,8 @@ class _ConfirmationRoomState extends State<ConfirmationRoom> {
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
+                    backgroundColor: const Color(0xffA7D1D7),
                     minimumSize: const Size(double.infinity, 56),
-                    primary: const Color(0xffA7D1D7),
                   ),
                   child: const Text(
                     'Done !',

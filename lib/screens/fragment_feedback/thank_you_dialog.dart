@@ -15,6 +15,16 @@ class ThankYouDialog extends StatefulWidget {
 }
 
 class _ThankYouDialogState extends State<ThankYouDialog> {
+  Future<void> onOkPressed() async {
+    // open link in browser
+    if (!await launchUrl(
+      widget.formLink,
+      mode: LaunchMode.externalApplication,
+    )) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -66,12 +76,7 @@ class _ThankYouDialogState extends State<ThankYouDialog> {
                 vertical: 10.0,
               ),
               child: ElevatedButton(
-                onPressed: () async {
-                  // open link in browser
-                  if (!await launchUrl(widget.formLink)) {
-                    Navigator.pop(context);
-                  }
-                },
+                onPressed: onOkPressed,
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
                   backgroundColor: const Color(0xffA7D1D7),

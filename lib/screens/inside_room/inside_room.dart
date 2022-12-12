@@ -100,6 +100,8 @@ class _InsideRoomState extends State<InsideRoom> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(users.toString());
+
     return FutureBuilder(
       future: response,
       builder: (context, snapshot) {
@@ -244,11 +246,12 @@ class _InsideRoomState extends State<InsideRoom> {
                                             ),
                                           ),
                                           title: Text(
-                                            users[index]['email'].substring(
-                                              0,
-                                              users[index]['email']
-                                                  .indexOf('@'),
-                                            ),
+                                            users[index]['name'] ??
+                                                users[index]['email'].substring(
+                                                  0,
+                                                  users[index]['email']
+                                                      .indexOf('@'),
+                                                ),
                                             style: const TextStyle(
                                               fontFamily: 'Google-Sans',
                                               fontSize: 14.0,

@@ -70,7 +70,6 @@ class _AppState extends State<App> {
                       const ProfileSettings(),
                   ManualPreferences.routeName: (context) =>
                       const ManualPreferences(),
-                  SelfAnalysis.routeName: (context) => const SelfAnalysis(),
                 },
               );
             }),

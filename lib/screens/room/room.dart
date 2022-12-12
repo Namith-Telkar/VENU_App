@@ -43,6 +43,7 @@ class _RoomState extends State<Room> {
       CreateRoomCode(),
       true,
     );
+    _roomsUpdaingFlag = false;
   }
 
   void openEnterRoomDialog() {
@@ -51,6 +52,7 @@ class _RoomState extends State<Room> {
       EnterRoomCode(),
       true,
     );
+    _roomsUpdaingFlag = false;
   }
 
   Future<List> setRoomList() async {

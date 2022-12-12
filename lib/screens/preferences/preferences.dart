@@ -33,7 +33,7 @@ class _PreferencesState extends State<Preferences> {
   late PermissionStatus permissionGranted;
   late LocationData locationData;
 
-  Future<LocationData> getLocation() async{
+  Future<LocationData> getLocation() async {
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
@@ -44,11 +44,47 @@ class _PreferencesState extends State<Preferences> {
       permissionGranted = await location.requestPermission();
     }
 
-    if(!serviceEnabled || permissionGranted != PermissionStatus.granted){
+    if (!serviceEnabled || permissionGranted != PermissionStatus.granted) {
       //show error
     }
     locationData = await location.getLocation();
     return locationData;
+  }
+
+  Future<void> submitTwitter() async {
+    if (isChecked) {
+      DialogManager.showLoadingDialog(context);
+      await getLocation();
+      userDetails['latitude'] = locationData.latitude;
+      userDetails['longitude'] = locationData.longitude;
+      userDetails['googleToken'] =
+          await FirebaseAuth.instance.currentUser!.getIdToken();
+      Map<String, dynamic> response = await NetworkHelper.addUser(userDetails);
+      if (response['success']) {
+        VenuUser user = VenuUser.fromNetworkMap(response['userDetails']);
+        StoreProvider.of<AppState>(context).dispatch(
+          UpdateNewUser(
+            newUser: user,
+          ),
+        );
+        DialogManager.hideDialog(context);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Landing.routeName,
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        DialogManager.hideDialog(context);
+        DialogManager.showErrorDialog(
+          'Error setting twitter handle',
+          context,
+          true,
+          () {
+            DialogManager.hideDialog(context);
+          },
+        );
+      }
+    }
   }
 
   @override
@@ -81,8 +117,10 @@ class _PreferencesState extends State<Preferences> {
                     ),
                   ),
                   Container(
-                    margin:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 40.0),
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 0.0,
+                      horizontal: 40.0,
+                    ),
                     child: const Text(
                       'Enter your Twitter ID to help us get to know your preferences',
                       style: TextStyle(
@@ -163,8 +201,7 @@ class _PreferencesState extends State<Preferences> {
                                     color: Colors.blue,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {}
-                              ),
+                                    ..onTap = () async {}),
                             ],
                           ),
                         ),
@@ -172,38 +209,14 @@ class _PreferencesState extends State<Preferences> {
                     ],
                   ),
                   Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 0.0),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        if (isChecked) {
-                          DialogManager.showLoadingDialog(context);
-                          await getLocation();
-                          userDetails['latitude'] = locationData.latitude;
-                          userDetails['longitude'] = locationData.longitude;
-                          userDetails['googleToken'] =
-                          await FirebaseAuth.instance.currentUser!.getIdToken();
-                          Map<String,dynamic> response = await NetworkHelper.addUser(userDetails);
-                          if(response['success']){
-                            VenuUser user = VenuUser.fromNetworkMap(response['userDetails']);
-                            StoreProvider.of<AppState>(context).dispatch(
-                                UpdateNewUser(newUser: user)
-                            );
-                            DialogManager.hideDialog(context);
-                            Navigator.pushReplacementNamed(context, Landing.routeName);
-                          }
-                          else{
-                            DialogManager.hideDialog(context);
-                            DialogManager.showErrorDialog('Error setting twitter handle', context, true, (){
-                              DialogManager.hideDialog(context);
-                            });
-                          }
-                        }
-                      },
+                      onPressed: submitTwitter,
                       style: ElevatedButton.styleFrom(
                         shape: const StadiumBorder(),
+                        backgroundColor: const Color(0xffA7D1D7),
                         minimumSize: const Size(double.infinity, 56),
-                        primary: const Color(0xffA7D1D7),
                       ),
                       child: const Text(
                         'Submit',
@@ -222,15 +235,15 @@ class _PreferencesState extends State<Preferences> {
                   Row(
                     children: const [
                       Expanded(
-                          child: Divider(
-                            thickness: 3.0,
-                            color: Color(0xff8A8A8E),
-                            endIndent: 10.0,
-                            indent: 10.0,
-                          )
+                        child: Divider(
+                          thickness: 3.0,
+                          color: Color(0xff8A8A8E),
+                          endIndent: 10.0,
+                          indent: 10.0,
+                        ),
                       ),
                       Text(
-                          'or',
+                        'or',
                         style: TextStyle(
                           fontFamily: 'Google-Sans',
                           fontSize: 18.0,
@@ -239,17 +252,16 @@ class _PreferencesState extends State<Preferences> {
                       ),
                       Expanded(
                           child: Divider(
-                            thickness: 3.0,
-                            color: Color(0xff8A8A8E),
-                            endIndent: 10.0,
-                            indent: 10.0,
-                          )
-                      ),
+                        thickness: 3.0,
+                        color: Color(0xff8A8A8E),
+                        endIndent: 10.0,
+                        indent: 10.0,
+                      )),
                     ],
                   ),
                   Container(
-                    margin:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 40.0),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 40.0),
                     child: const Text(
                       'Don\'t have a Twitter account? It\'s fine \n Select your personality manually',
                       style: TextStyle(
@@ -260,16 +272,19 @@ class _PreferencesState extends State<Preferences> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 0.0),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 0.0),
                     child: OutlinedButton(
                       onPressed: () async {
-                        Navigator.pushNamed(context, ManualPreferences.routeName);
+                        Navigator.pushNamed(
+                          context,
+                          ManualPreferences.routeName,
+                        );
                       },
                       style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
                         shape: const StadiumBorder(),
-                        minimumSize:
-                        const Size(double.infinity, 56),
-                        primary: Colors.white,
+                        minimumSize: const Size(double.infinity, 56),
                         side: const BorderSide(
                           color: Color(0xffA7D1D7),
                           width: 3.0,
