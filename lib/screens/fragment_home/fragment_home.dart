@@ -32,7 +32,7 @@ class _FragmentHomeState extends State<FragmentHome> {
   void findVenuesNearMe() {
     DialogManager.showCustomDialog(
       context,
-      FindVenuesDialog(),
+      const FindVenuesDialog(),
       true,
     );
   }
@@ -44,7 +44,15 @@ class _FragmentHomeState extends State<FragmentHome> {
       suggestions,
     );
 
-    return result['venues'];
+    List<dynamic> venues = result['venues'];
+
+    if (venues.isNotEmpty) {
+      widget.setFloatingActionButton(getFloatingActionButton());
+    } else {
+      widget.setFloatingActionButton(null);
+    }
+
+    return venues;
   }
 
   FloatingActionButton getFloatingActionButton() {
@@ -157,16 +165,18 @@ class _FragmentHomeState extends State<FragmentHome> {
           });
         } else {
           getSuggestions(_appState.user!.suggestions as Map<String, dynamic>)
-              .then((value) {
-            StoreProvider.of<AppState>(context).dispatch(
-              UpdateUserSuggestions(
-                userSuggestions: value,
-              ),
-            );
-            setState(() {
-              _isLoading = false;
-            });
-          });
+              .then(
+            (value) {
+              StoreProvider.of<AppState>(context).dispatch(
+                UpdateUserSuggestions(
+                  userSuggestions: value,
+                ),
+              );
+              setState(() {
+                _isLoading = false;
+              });
+            },
+          );
         }
         widget.setFloatingActionButton(getFloatingActionButton());
       } else {

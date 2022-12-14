@@ -25,7 +25,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late AppState _appState;
-  static const int APP_VERISON = 2;
+  static const int APP_VERSION = 2;
 
   void showUpdateAppDialog(Uri url) {
     DialogManager.showErrorDialog(
@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
 
-    if (appConfigs.appVersion > APP_VERISON) {
+    if (appConfigs.appVersion > APP_VERSION) {
       showUpdateAppDialog(appConfigs.appLink);
       return;
     }

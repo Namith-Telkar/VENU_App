@@ -364,17 +364,28 @@ class NetworkHelper {
     String twitterId,
   ) async {
     var url = Uri.parse('$endpoint/api/user/updatePersonality');
-    var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'token': googleToken, 'twitter': twitterId}));
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
+          'token': googleToken,
+          'twitter': twitterId,
+        },
+      ),
+    );
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
+      result['message'] =
+          responseObject['message'] ?? 'Your Twitter ID has been updated :)';
       return result;
     }
     result['success'] = false;
+    result['message'] =
+        responseObject['message'] ?? 'Something went wrong :(, try again later';
     return result;
   }
 
@@ -383,20 +394,29 @@ class NetworkHelper {
     String personality,
   ) async {
     var url = Uri.parse('$endpoint/api/user/updatePersonality');
-    var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
           'token': googleToken,
           'personality': personality,
-        }));
+        },
+      ),
+    );
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
       result['user'] = responseObject['user'];
+      result['message'] =
+          responseObject['message'] ?? 'Your personality has been updated :)';
       return result;
     }
+
     result['success'] = false;
+    result['message'] =
+        responseObject['message'] ?? 'Something went wrong :(, try again later';
     return result;
   }
 

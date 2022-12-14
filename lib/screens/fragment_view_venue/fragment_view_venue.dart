@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:venu/services/ad_helper.dart';
+import 'package:venu/widgets/show_banner_ad.dart';
 
 import 'review_card.dart';
 
@@ -17,14 +19,28 @@ class FragmentViewVenue extends StatefulWidget {
 
 class _FragmentViewVenueState extends State<FragmentViewVenue> {
   @override
+  void initState() {
+    super.initState();
+    // AdHelper.showInterstitialAd(
+    //   AdHelper.viewVenueInterstitialAd,
+    //   () {},
+    // );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
+          Center(
+            child: ShowBannerAd(
+              adUnitId: AdHelper.viewVenueBannerAd,
+            ),
+          ),
+          const SizedBox(
+            height: 40.0,
           ),
           Container(
             margin: const EdgeInsets.symmetric(
