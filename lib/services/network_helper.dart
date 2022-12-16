@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:venu/models/AppConfigs.dart';
 
+import '../models/venuUser.dart';
+
 class NetworkHelper {
   NetworkHelper();
 
@@ -25,18 +27,20 @@ class NetworkHelper {
 
   static Future<Map<String, dynamic>> getUser(String googleToken) async {
     var url = Uri.parse('$endpoint/api/user/getDetails');
-    var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+    var response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
           'token': googleToken,
-        }));
+        },
+      ),
+    );
     Map<String, dynamic> responseObject = json.decode(response.body);
     Map<String, dynamic> result = {};
     if (responseObject['success']) {
       result['success'] = true;
-      result['user'] = responseObject['user'];
-      result['venueTypes'] = responseObject['venueTypes'];
-      result['personalityTypes'] = responseObject['personalityTypes'];
+      result['user'] = VenuUser.fromNetworkMap(responseObject['user']);
       return result;
     }
     result['success'] = false;
@@ -302,7 +306,7 @@ class NetworkHelper {
   ) async {
     Map<String, dynamic> result = {
       'success': false,
-      'error': 'Not implemented',
+      'message': 'Not implemented',
     };
 
     var url = Uri.parse('$endpoint/api/user/getPredictionsNearMe');
@@ -328,6 +332,9 @@ class NetworkHelper {
       result['venues'] = responseObject['result'];
       result['user'] = responseObject['user'];
       return result;
+    } else {
+      result['message'] = responseObject['message'] ??
+          'You might not have enough credits for this operation';
     }
 
     return result;

@@ -25,7 +25,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late AppState _appState;
-  static const int APP_VERSION = 2;
+  static const int APP_VERSION = 3;
 
   void showUpdateAppDialog(Uri url) {
     DialogManager.showErrorDialog(
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
 
       if (userResult['success']) {
-        VenuUser user = VenuUser.fromNetworkMap(userResult['user']);
+        VenuUser user = userResult['user'] as VenuUser;
         StoreProvider.of<AppState>(context).dispatch(
           UpdateNewUser(
             newUser: user,

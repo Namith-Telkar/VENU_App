@@ -156,9 +156,8 @@ class SignIn extends StatelessWidget {
                                         //   int endLength = token.length;
                                         //   token = token.substring(initLength, endLength);
                                         // }
-                                        VenuUser user = VenuUser.fromNetworkMap(
-                                          temp['user'],
-                                        );
+                                        VenuUser user =
+                                            temp['user'] as VenuUser;
                                         StoreProvider.of<AppState>(context)
                                             .dispatch(
                                           UpdateNewUser(

@@ -7,10 +7,12 @@ import 'package:rive/rive.dart';
 import 'package:venu/redux/actions.dart';
 import 'package:venu/screens/fragment_home/find_venues_dialog.dart';
 import 'package:venu/screens/fragment_home/venue_card.dart';
+import 'package:venu/services/ad_helper.dart';
 
 import '../../redux/store.dart';
 import '../../services/dialog_manager.dart';
 import '../../services/network_helper.dart';
+import '../../widgets/credits_dialog.dart';
 
 class FragmentHome extends StatefulWidget {
   final Function setFloatingActionButton;
@@ -29,12 +31,73 @@ class _FragmentHomeState extends State<FragmentHome> {
 
   bool _isLoading = true;
 
-  void findVenuesNearMe() {
+  void creditsNotEnough() {
     DialogManager.showCustomDialog(
-      context,
-      const FindVenuesDialog(),
+      _appStateContext,
+      CreditsDialog(
+        title: 'Oops! Not enough credits',
+        content: 'You have 0 credits left. Watch an ad to get more credits.',
+        okText: 'Watch an Ad',
+        okFunction: () async {
+          String googleToken =
+              await FirebaseAuth.instance.currentUser!.getIdToken();
+          String userId = FirebaseAuth.instance.currentUser!.uid;
+
+          AdHelper.showRewardedAd(
+            adUnitId: AdHelper.getMoreTokensRewardedAd,
+            userId: userId,
+            token: googleToken,
+            onUserEarnedReward: () {
+              DialogManager.hideDialog(context); // hide the credits dialog
+              DialogManager.showErrorDialog(
+                'Congratulation! you are eligible for free credits.',
+                context,
+                false,
+                () async {
+                  DialogManager.showLoadingDialog(context);
+                  // wait for 3 seconds
+                  await Future.delayed(
+                    const Duration(seconds: 3),
+                    () {},
+                  );
+
+                  String googleToken =
+                      await FirebaseAuth.instance.currentUser!.getIdToken();
+                  Map<String, dynamic> res = await NetworkHelper.getUser(
+                    googleToken,
+                  );
+
+                  if (res['success']) {
+                    StoreProvider.of<AppState>(context).dispatch(
+                      UpdateNewUser(
+                        newUser: res['user'],
+                      ),
+                    );
+                  }
+                  // hide loading dialog
+                  DialogManager.hideDialog(context);
+                  // hide congratulation dialog
+                  DialogManager.hideDialog(context);
+                },
+              );
+            },
+          );
+        },
+      ),
       true,
     );
+  }
+
+  void findVenuesNearMe() {
+    if (_appState.user!.suggestions.isNotEmpty && _appState.user!.credits < 1) {
+      creditsNotEnough();
+    } else {
+      DialogManager.showCustomDialog(
+        context,
+        const FindVenuesDialog(),
+        true,
+      );
+    }
   }
 
   Future<List> getSuggestions(Map<String, dynamic> suggestions) async {
@@ -157,6 +220,8 @@ class _FragmentHomeState extends State<FragmentHome> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      AdHelper.initializeRewardedAd(adUnitId: AdHelper.getMoreTokensRewardedAd);
+
       if (_appState.user != null && _appState.user!.suggestions.isNotEmpty) {
         if (_appState.userSuggestions != null &&
             _appState.userSuggestions!.isNotEmpty) {

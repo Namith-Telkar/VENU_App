@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:venu/screens/fragment_view_venue/fragment_view_venue.dart';
 import 'package:venu/services/ad_helper.dart';
+import 'package:venu/widgets/show_banner_ad.dart';
 
 class VenueCard extends StatefulWidget {
   final Map<String, dynamic> venue;
@@ -17,40 +18,49 @@ class VenueCard extends StatefulWidget {
 
 class _VenueCardState extends State<VenueCard> {
   void viewVenue() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => Scaffold(
-    //       backgroundColor: const Color(0xffE5E5E5),
-    //       resizeToAvoidBottomInset: false,
-    //       body: SafeArea(
-    //         child: FragmentViewVenue(
-    //           venue: widget.venue,
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
-
-    AdHelper.showInterstitialAd(
-      AdHelper.viewVenueInterstitialAd,
-      () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Scaffold(
-              backgroundColor: const Color(0xffE5E5E5),
-              resizeToAvoidBottomInset: false,
-              body: SafeArea(
-                child: FragmentViewVenue(
-                  venue: widget.venue,
-                ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: const Color(0xffE5E5E5),
+          resizeToAvoidBottomInset: false,
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ShowBannerAd(
+                adUnitId: AdHelper.viewVenueBannerAd,
               ),
+            ],
+          ),
+          body: SafeArea(
+            child: FragmentViewVenue(
+              venue: widget.venue,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
+
+    // AdHelper.showInterstitialAd(
+    //   AdHelper.viewVenueInterstitialAd,
+    //   () {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => Scaffold(
+    //           backgroundColor: const Color(0xffE5E5E5),
+    //           resizeToAvoidBottomInset: false,
+    //           body: SafeArea(
+    //             child: FragmentViewVenue(
+    //               venue: widget.venue,
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   @override

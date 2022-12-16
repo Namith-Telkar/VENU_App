@@ -34,11 +34,11 @@ class _FragmentViewVenueState extends State<FragmentViewVenue> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: ShowBannerAd(
-              adUnitId: AdHelper.viewVenueBannerAd,
-            ),
-          ),
+          // Center(
+          //   child: ShowBannerAd(
+          //     adUnitId: AdHelper.viewVenueBannerAd,
+          //   ),
+          // ),
           const SizedBox(
             height: 40.0,
           ),

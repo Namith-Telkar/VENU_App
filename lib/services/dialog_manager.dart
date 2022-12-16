@@ -24,12 +24,12 @@ class DialogManager {
     );
   }
 
-  static void showCustomDialog(
+  static Future<void> showCustomDialog(
     BuildContext context,
     Widget alertDialog,
     bool barrierDismissible,
-  ) {
-    showDialog(
+  ) async {
+    return showDialog(
       barrierDismissible: barrierDismissible,
       context: context,
       builder: (BuildContext context) {
@@ -67,9 +67,9 @@ class DialogManager {
   }
 
   static void showTransparentDialog(
-      BuildContext context,
-      bool barrierDismissible,
-      ) {
+    BuildContext context,
+    bool barrierDismissible,
+  ) {
     showDialog(
       barrierDismissible: barrierDismissible,
       context: context,
