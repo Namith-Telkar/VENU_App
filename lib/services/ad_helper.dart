@@ -57,6 +57,18 @@ class AdHelper {
     throw UnsupportedError("Unsupported platform");
   }
 
+  static String get joinOrCreateRoomInterstitialAd {
+    if (Platform.isAndroid) {
+      return 'ca-app-pub-1247985751357725/8906836970';
+
+      // test id
+      // return 'ca-app-pub-3940256099942544/1033173712';
+    } else if (Platform.isIOS) {
+      return '////ca-app-pub-3940256099942544/2934735716';
+    }
+    throw UnsupportedError("Unsupported platform");
+  }
+
   static String get getMoreTokensRewardedAd {
     if (Platform.isAndroid) {
       return 'ca-app-pub-1247985751357725/7337430971';
@@ -208,6 +220,7 @@ class AdHelper {
 
       _interstitialAds[adUnitId]!.show();
       _interstitialAds.remove(adUnitId);
+      initializeInterstitialAd(adUnitId: adUnitId);
     } else {
       initializeInterstitialAd(adUnitId: adUnitId, onDone: onAdClosed);
     }

@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rive/rive.dart';
 import 'package:venu/screens/room/create_room_dialog.dart';
 import 'package:venu/screens/room/enter_room_dialog.dart';
+import 'package:venu/services/ad_helper.dart';
 import 'package:venu/services/dialog_manager.dart';
 
 import '../../redux/actions.dart';
@@ -35,24 +36,36 @@ class _RoomState extends State<Room> {
   late BuildContext _appStateContext;
   late AppState _appState;
 
-  bool _roomsUpdaingFlag = false;
+  bool _roomsUpdatingFlag = false;
 
   void openCreateRoomDialog() {
-    DialogManager.showCustomDialog(
-      context,
-      CreateRoomCode(),
-      true,
+    AdHelper.showInterstitialAd(
+      AdHelper.joinOrCreateRoomInterstitialAd,
+      () {
+        DialogManager.showCustomDialog(
+          context,
+          CreateRoomCode(),
+          true,
+        );
+      },
     );
-    _roomsUpdaingFlag = false;
+
+    _roomsUpdatingFlag = false;
   }
 
   void openEnterRoomDialog() {
-    DialogManager.showCustomDialog(
-      context,
-      EnterRoomCode(),
-      true,
+    AdHelper.showInterstitialAd(
+      AdHelper.joinOrCreateRoomInterstitialAd,
+      () {
+        DialogManager.showCustomDialog(
+          context,
+          EnterRoomCode(),
+          true,
+        );
+      },
     );
-    _roomsUpdaingFlag = false;
+
+    _roomsUpdatingFlag = false;
   }
 
   Future<List> setRoomList() async {
@@ -407,6 +420,9 @@ class _RoomState extends State<Room> {
   @override
   void initState() {
     super.initState();
+    AdHelper.initializeInterstitialAd(
+      adUnitId: AdHelper.joinOrCreateRoomInterstitialAd,
+    );
     roomList = Future<List<dynamic>>.value([]);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_appState.rooms != null && _appState.rooms!.isEmpty) {
@@ -443,10 +459,10 @@ class _RoomState extends State<Room> {
           _appState = state;
           if ((_appState.roomsUpdated == null ||
                   _appState.roomsUpdated == true) &&
-              !_roomsUpdaingFlag) {
+              !_roomsUpdatingFlag) {
             debugPrint("rooms updated");
             roomList = setRoomList();
-            _roomsUpdaingFlag = true;
+            _roomsUpdatingFlag = true;
           }
           return getCurrentPage(_appStateContext);
         },

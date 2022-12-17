@@ -24,15 +24,15 @@ class _VenueCardState extends State<VenueCard> {
         builder: (context) => Scaffold(
           backgroundColor: const Color(0xffE5E5E5),
           resizeToAvoidBottomInset: false,
-          bottomNavigationBar: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ShowBannerAd(
-                adUnitId: AdHelper.viewVenueBannerAd,
-              ),
-            ],
-          ),
+          // bottomNavigationBar: Column(
+          //   mainAxisSize: MainAxisSize.min,
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     ShowBannerAd(
+          //       adUnitId: AdHelper.viewVenueBannerAd,
+          //     ),
+          //   ],
+          // ),
           body: SafeArea(
             child: FragmentViewVenue(
               venue: widget.venue,
